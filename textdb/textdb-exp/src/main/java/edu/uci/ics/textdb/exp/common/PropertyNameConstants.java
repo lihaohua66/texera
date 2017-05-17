@@ -71,4 +71,14 @@ public class PropertyNameConstants {
     public static final String SPAN_DISTANCE = "spanDistance";
     public static final String JOIN_SIMILARITY_THRESHOLD = "similarityThreshold";
     
+    // related to asterix connector
+    public static final String ASTERIX_HOST = "host";
+    public static final String ASTERIX_PORT = "port";
+    public static final String ASTERIX_DATAVERSE = "dataverse";
+    public static final String ASTERIX_DATASET = "dataset";
+    public static final String ASTERIX_QUERY_FIELD = "queryField";
+    
+    // related to twitter converter
+    public static final String TWITTER_RAW_ATTRIBUTE = "rawDataAttribute";
+    
 }
