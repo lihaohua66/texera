@@ -1,9 +1,7 @@
 package edu.uci.ics.textdb.exp.regexmatcher;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import edu.uci.ics.textdb.api.constants.SchemaConstants;
 import edu.uci.ics.textdb.api.exception.DataFlowException;
@@ -27,7 +25,8 @@ public class RegexMatcher extends AbstractSingleInputOperator {
 	
     private final RegexPredicate predicate;
     private static final String labelSyntax = "<[^<>]*>";
-    
+    //(<[^<>]*>[+]*)
+
     // two available regex engines, RegexMatcher will try RE2J first
     private enum RegexEngine {
         JavaRegex, RE2J
@@ -49,7 +48,7 @@ public class RegexMatcher extends AbstractSingleInputOperator {
     protected void setUp() throws DataFlowException {
         inputSchema = inputOperator.getOutputSchema();
         outputSchema = inputSchema;
-        idLabelMapping = new HashMap<>();
+        idLabelMapping = new HashMap<Integer, HashSet<String>>();
         regexMod = extractLabels(predicate.getRegex(), idLabelMapping);
         if(idLabelMapping.size()==0) {
         	// No labels in regex
@@ -60,12 +59,12 @@ public class RegexMatcher extends AbstractSingleInputOperator {
         }
     }
     
-    
+
     @Override
     protected Tuple computeNextMatchingTuple() throws TextDBException {
         Tuple inputTuple = null;
         Tuple resultTuple = null;
-        
+
         while ((inputTuple = inputOperator.getNextTuple()) != null) {
             if (!inputSchema.containsField(SchemaConstants.SPAN_LIST)) {
                 inputTuple = DataflowUtils.getSpanTuple(inputTuple.getFields(), new ArrayList<Span>(), outputSchema);
@@ -75,7 +74,7 @@ public class RegexMatcher extends AbstractSingleInputOperator {
                 break;
             }
         }
-        
+
         return resultTuple;
     }
 
@@ -86,7 +85,7 @@ public class RegexMatcher extends AbstractSingleInputOperator {
      * [Span(name, 0, 6, "g[^\s]*", "george watson"), Span(position, 0, 8,
      * "g[^\s]*", "graduate student")]
      * 
-     * @param tuple
+     * @param inputTuple
      *            document in which search is performed
      * @return a list of spans describing the occurrence of a matching sequence
      *         in the document
@@ -94,6 +93,8 @@ public class RegexMatcher extends AbstractSingleInputOperator {
      */
     @Override
     public Tuple processOneInputTuple(Tuple inputTuple) {
+        long totalTime = 0;
+        long start = System.currentTimeMillis();
         if (inputTuple == null) {
             return null;
         }
@@ -103,12 +104,17 @@ public class RegexMatcher extends AbstractSingleInputOperator {
         	return processUnlabelledRegex(inputTuple);
         }
         // else labelled regex
+
+
+        long curtime = System.currentTimeMillis();
+        totalTime += curtime - start;
+        System.out.println(totalTime);
         return processLabelledRegex(inputTuple);
 
     }
     
     private Tuple processLabelledRegex(Tuple inputTuple) {
-    	HashMap<Integer, HashSet<String>> labelSpanList = createLabelledSpanList(inputTuple, idLabelMapping);
+    	HashMap<Integer, List<List<Span>>> labelSpanList = createLabelledSpanList(inputTuple, idLabelMapping);
     	ArrayList<String> allRegexCombincations = generateAllCombinationsOfRegex(regexMod, labelSpanList);
         ListField<Span> spanListField = inputTuple.getField(SchemaConstants.SPAN_LIST);
         List<Span> spanList = spanListField.getValue();
@@ -278,13 +284,13 @@ public class RegexMatcher extends AbstractSingleInputOperator {
         return matchingResults;
     }
     
-	private ArrayList<String> generateAllCombinationsOfRegex(String genericRegex, HashMap<Integer, HashSet<String>> labelSpanList) {
+	private ArrayList<String> generateAllCombinationsOfRegex(String genericRegex, HashMap<Integer, List<List<Span>>> labelSpanList) {
     	ArrayList<String> allRegexCombinations = new ArrayList<String>();
     	String regEx = "<([0-9]+)>";
     	java.util.regex.Matcher m = java.util.regex.Pattern.compile(regEx).matcher(genericRegex);
     	List<Integer> pos = new ArrayList<Integer>();
     	List<Integer> matchedValues = new ArrayList<Integer>();
-    	List<HashSet<String>> listOfSets = new ArrayList<HashSet<String>>();
+    	List<List<List<Span>>> listOfSets = new ArrayList<>();
     	int matchedValue = 0;
 		while (m.find())
 		{
@@ -296,46 +302,51 @@ public class RegexMatcher extends AbstractSingleInputOperator {
 		    }
 		}
 
-		List<List<String>> cartesianResult = cartesianProduct(listOfSets);
+		List<List<Span>> cartesianResult = cartesianProduct(listOfSets);
 
 		allRegexCombinations = getRegexCombinations(genericRegex, labelSpanList, cartesianResult);
 
     	return allRegexCombinations;
     }
 
-    public static List<List<String>> cartesianProduct(List<HashSet<String>> lists) {
-	    List<List<String>> resultLists = new ArrayList<List<String>>();
+    public List<List<Span>> cartesianProduct(List<List<List<Span>>> lists) {
+	    List<List<Span>> resultLists = new ArrayList<List<Span>>();
 	    if (lists.size() == 0) {
-	        resultLists.add(new ArrayList<String>());
+	        resultLists.add(new ArrayList<Span>());
 	        return resultLists;
 	    } 
 	    else {
-	        HashSet<String> firstSet = lists.get(0);
-	        List<List<String>> remainingLists = cartesianProduct(lists.subList(1, lists.size()));
-	        for (String condition : firstSet) {
-	            for (List<String> remainingList : remainingLists) {
-	                ArrayList<String> resultList = new ArrayList<String>();
-	                resultList.add(condition);
+	        List<List<Span>> firstSet = lists.get(0);
+	        List<List<Span>> remainingLists = cartesianProduct(lists.subList(1, lists.size()));
+	        for(List<Span> list: firstSet){
+	        for (Span span : list) {
+	            for (List<Span> remainingList : remainingLists) {
+	                ArrayList<Span> resultList = new ArrayList<Span>();
+	                resultList.add(span);
 	                resultList.addAll(remainingList);
 	                resultLists.add(resultList);
 	            }
 	        }
 	    }
+
+        }
+
+        resultLists.removeIf(result -> !validCombination(result));
 	    return resultLists;
 	}
 
-	public static ArrayList<String> getRegexCombinations(String regex, HashMap<Integer, HashSet<String>> labelSpanList, List<List<String>> stringReplacements) {
+	private static ArrayList<String> getRegexCombinations(String regex, HashMap<Integer, List<List<Span>>> labelSpanList, List<List<Span>> stringReplacements) {
 		ArrayList<String> resultArray = new ArrayList<String>();
 
 		String regExpression;
 		String pattern = ""; 
 		String resultStr = "";
 
-    	for(List<String> words: stringReplacements) {
+    	for(List<Span> words: stringReplacements) {
     		regExpression = regex;
     		for(Integer key: labelSpanList.keySet()) {
     			pattern = "<" + key + ">";
-       			resultStr = regExpression.replace(pattern, words.get(key - 1));
+       			resultStr = regExpression.replace(pattern, words.get(key - 1).getValue());
     			regExpression = resultStr;
     		}
     		resultArray.add(regExpression);
@@ -343,18 +354,43 @@ public class RegexMatcher extends AbstractSingleInputOperator {
 		return resultArray;
 		
 	}
+	private boolean validCombination(List<Span> list){
+        for(int i = 0; i < list.size()-1; i++){
+            if(list.get(i+1).getStart() - list.get(i).getEnd() < 0){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+   // private HashMap<Integer, HashSet<String>> createLabelledSpanList(Tuple inputTuple, HashMap<Integer, HashSet<String>> idLabelMapping) {
+   // 	HashMap<Integer, HashSet<String>> labelSpanList = new HashMap<Integer, HashSet<String>>();
+    //    for (int id : idLabelMapping.keySet()) {
+     //       HashSet<String> labels = idLabelMapping.get(id);
+     //       HashSet<String> values = new HashSet<String>();
+     //       for (String oneField : labels) {
+     //           ListField<Span> spanListField = inputTuple.getField(oneField);
+     //           List<Span> spanList = spanListField.getValue();
+     //           for (Span span : spanList) {
+     //               values.add(span.getValue());
+     //           }
+     //       }
+     //       labelSpanList.put(id, values);
+     //   }
+     //   return labelSpanList;
+   // }
 
-    private HashMap<Integer, HashSet<String>> createLabelledSpanList(Tuple inputTuple, HashMap<Integer, HashSet<String>> idLabelMapping) {
-    	HashMap<Integer, HashSet<String>> labelSpanList = new HashMap<Integer, HashSet<String>>();
+    private HashMap<Integer, List<List<Span>>> createLabelledSpanList(Tuple inputTuple, HashMap<Integer, HashSet<String>> idLabelMapping) {
+        HashMap<Integer, List<List<Span>>> labelSpanList = new HashMap<>();
         for (int id : idLabelMapping.keySet()) {
             HashSet<String> labels = idLabelMapping.get(id);
-            HashSet<String> values = new HashSet<String>();
+            List<List<Span>> values = new ArrayList<>();
+            //HashSet<String> values = new HashSet<String>();
             for (String oneField : labels) {
                 ListField<Span> spanListField = inputTuple.getField(oneField);
                 List<Span> spanList = spanListField.getValue();
-                for (Span span : spanList) {
-                    values.add(span.getValue());
-                }
+                values.add(spanList);
             }
             labelSpanList.put(id, values);
         }
