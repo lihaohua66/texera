@@ -5,6 +5,7 @@ import java.util.Map;
 
 import edu.uci.ics.textdb.api.exception.PlanGenException;
 import edu.uci.ics.textdb.exp.common.PredicateBase;
+import edu.uci.ics.textdb.exp.comparablematcher.ComparablePredicate;
 import edu.uci.ics.textdb.exp.dictionarymatcher.DictionaryPredicate;
 import edu.uci.ics.textdb.exp.dictionarymatcher.DictionarySourcePredicate;
 import edu.uci.ics.textdb.exp.fuzzytokenmatcher.FuzzyTokenPredicate;
@@ -59,9 +60,11 @@ public class OperatorArityConstants {
         fixedInputArityMap.put(SamplerPredicate.class, 1);
         fixedInputArityMap.put(WordCountIndexSourcePredicate.class, 0);
         fixedInputArityMap.put(WordCountOperatorPredicate.class, 1);
+        fixedInputArityMap.put(ComparablePredicate.class, 1); 
         
         fixedInputArityMap.put(TwitterConverterPredicate.class, 1);
         fixedInputArityMap.put(AsterixSourcePredicate.class, 0);
+
 
         fixedInputArityMap.put(ScanSourcePredicate.class, 0);
         fixedInputArityMap.put(FileSourcePredicate.class, 0);
@@ -93,6 +96,7 @@ public class OperatorArityConstants {
         fixedOutputArityMap.put(SamplerPredicate.class, 1);
         fixedOutputArityMap.put(WordCountIndexSourcePredicate.class, 1);
         fixedOutputArityMap.put(WordCountOperatorPredicate.class, 1);
+        fixedOutputArityMap.put(ComparablePredicate.class, 1); 
         
         fixedOutputArityMap.put(TwitterConverterPredicate.class, 1);
         fixedOutputArityMap.put(AsterixSourcePredicate.class, 1);

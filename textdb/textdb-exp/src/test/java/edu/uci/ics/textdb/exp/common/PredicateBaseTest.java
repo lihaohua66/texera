@@ -8,6 +8,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.uci.ics.textdb.api.utils.TestUtils;
+import edu.uci.ics.textdb.exp.comparablematcher.ComparablePredicate;
+import edu.uci.ics.textdb.exp.comparablematcher.ComparisonType;
 import edu.uci.ics.textdb.exp.dictionarymatcher.Dictionary;
 import edu.uci.ics.textdb.exp.dictionarymatcher.DictionaryPredicate;
 import edu.uci.ics.textdb.exp.dictionarymatcher.DictionarySourcePredicate;
@@ -240,6 +242,11 @@ public class PredicateBaseTest {
     public void testTableSink() throws Exception {
         TestUtils.testJsonSerialization(new TableSinkPredicate(
                 "tableName", null), true);
+    }
+    
+    @Test
+    public void testComparable() throws Exception {
+        testPredicate(new ComparablePredicate("attr", ComparisonType.EQUAL_TO, 1));
     }
 
 }

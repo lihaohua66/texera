@@ -80,5 +80,8 @@ public class PropertyNameConstants {
     
     // related to twitter converter
     public static final String TWITTER_RAW_ATTRIBUTE = "rawDataAttribute";
-    
+
+    // related to ComparableMatcher
+    public static final String COMPARISON_TYPE = "comparisonType";
+    public static final String COMPARE_TO_VALUE = "compareTo";
 }
