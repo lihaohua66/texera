@@ -263,7 +263,8 @@ let asterixSource = {
         "dataverse": "twitter",
         "dataset": "ds_tweet",
         "queryField": "text",
-        "query": "zika"
+        "query": "zika",
+        "limit": 10000,
     }
   }
 }
