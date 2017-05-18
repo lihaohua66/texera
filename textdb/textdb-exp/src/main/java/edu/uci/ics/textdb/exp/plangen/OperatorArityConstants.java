@@ -21,9 +21,12 @@ import edu.uci.ics.textdb.exp.regexmatcher.RegexSourcePredicate;
 import edu.uci.ics.textdb.exp.regexsplit.RegexSplitPredicate;
 import edu.uci.ics.textdb.exp.sampler.SamplerPredicate;
 import edu.uci.ics.textdb.exp.sink.excel.ExcelSinkPredicate;
+import edu.uci.ics.textdb.exp.sink.table.TableSinkPredicate;
 import edu.uci.ics.textdb.exp.sink.tuple.TupleSinkPredicate;
+import edu.uci.ics.textdb.exp.source.asterix.AsterixSourcePredicate;
 import edu.uci.ics.textdb.exp.source.file.FileSourcePredicate;
 import edu.uci.ics.textdb.exp.source.scan.ScanSourcePredicate;
+import edu.uci.ics.textdb.exp.twitter.TwitterConverterPredicate;
 import edu.uci.ics.textdb.exp.wordcount.WordCountIndexSourcePredicate;
 import edu.uci.ics.textdb.exp.wordcount.WordCountOperatorPredicate;
 
@@ -56,13 +59,16 @@ public class OperatorArityConstants {
         fixedInputArityMap.put(SamplerPredicate.class, 1);
         fixedInputArityMap.put(WordCountIndexSourcePredicate.class, 0);
         fixedInputArityMap.put(WordCountOperatorPredicate.class, 1);
-                
+        
+        fixedInputArityMap.put(TwitterConverterPredicate.class, 1);
+        fixedInputArityMap.put(AsterixSourcePredicate.class, 0);
 
         fixedInputArityMap.put(ScanSourcePredicate.class, 0);
         fixedInputArityMap.put(FileSourcePredicate.class, 0);
         
         fixedInputArityMap.put(TupleSinkPredicate.class, 1);
         fixedInputArityMap.put(ExcelSinkPredicate.class, 1);
+        fixedInputArityMap.put(TableSinkPredicate.class, 1);
 
     }
     
@@ -87,12 +93,16 @@ public class OperatorArityConstants {
         fixedOutputArityMap.put(SamplerPredicate.class, 1);
         fixedOutputArityMap.put(WordCountIndexSourcePredicate.class, 1);
         fixedOutputArityMap.put(WordCountOperatorPredicate.class, 1);
+        
+        fixedOutputArityMap.put(TwitterConverterPredicate.class, 1);
+        fixedOutputArityMap.put(AsterixSourcePredicate.class, 1);
 
         fixedOutputArityMap.put(ScanSourcePredicate.class, 1);
         fixedOutputArityMap.put(FileSourcePredicate.class, 1);
         
         fixedOutputArityMap.put(TupleSinkPredicate.class, 0);
         fixedOutputArityMap.put(ExcelSinkPredicate.class, 0);
+        fixedOutputArityMap.put(TableSinkPredicate.class, 0);
 
     }
     
