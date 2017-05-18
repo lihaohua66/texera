@@ -50,7 +50,7 @@ public class TwitterConverter implements IOperator {
 
     @Override
     public Tuple getNextTuple() throws TextDBException {
-        if (cursor != OPENED) {
+        if (cursor == CLOSED) {
             throw new DataFlowException(ErrorMessages.OPERATOR_NOT_OPENED);
         }
         Tuple tuple;
@@ -71,7 +71,7 @@ public class TwitterConverter implements IOperator {
     
     private List<IField> generateFieldsFromJson(String rawJsonData) {
         try {
-            JsonNode tweet = new ObjectMapper().readTree(rawJsonData);
+            JsonNode tweet = new ObjectMapper().readTree(rawJsonData).get("ds");
             String text = tweet.get("text").asText();
             Long id = tweet.get("id").asLong();
             String tweetLink = "https://twitter.com/statuses/" + id;
@@ -101,6 +101,7 @@ public class TwitterConverter implements IOperator {
                     new TextField(city),
                     new StringField(createAt));
         } catch (Exception e) {
+            e.printStackTrace();
             return Arrays.asList();
         }
     }

@@ -550,7 +550,7 @@ let excelSink = {
   top : 20,
   left : 20,
   properties : {
-    title : 'View Results',
+    title : 'WriteExcel',
     inputs : {
       input_1 : {
         label : "Input (:i)",
@@ -613,7 +613,6 @@ export const DEFAULT_MATCHERS: Data[] = [
     {id: 19, jsonData: result},
     {id: 20, jsonData: excelSink},
     {id: 21, jsonData: comparison},
-    
     {id: 22, jsonData: asterixSource},
     {id: 23, jsonData: twitterConverter},
     {id: 24, jsonData: writeTable},
