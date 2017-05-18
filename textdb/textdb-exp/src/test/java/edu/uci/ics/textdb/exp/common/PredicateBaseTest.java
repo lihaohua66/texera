@@ -29,9 +29,12 @@ import edu.uci.ics.textdb.exp.regexsplit.RegexSplitPredicate.SplitType;
 import edu.uci.ics.textdb.exp.sampler.SamplerPredicate;
 import edu.uci.ics.textdb.exp.sampler.SamplerPredicate.SampleType;
 import edu.uci.ics.textdb.exp.sink.excel.ExcelSinkPredicate;
+import edu.uci.ics.textdb.exp.sink.table.TableSinkPredicate;
 import edu.uci.ics.textdb.exp.sink.tuple.TupleSinkPredicate;
+import edu.uci.ics.textdb.exp.source.asterix.AsterixSourcePredicate;
 import edu.uci.ics.textdb.exp.source.file.FileSourcePredicate;
 import edu.uci.ics.textdb.exp.source.scan.ScanSourcePredicate;
+import edu.uci.ics.textdb.exp.twitter.TwitterConverterPredicate;
 import edu.uci.ics.textdb.exp.wordcount.WordCountIndexSourcePredicate;
 import edu.uci.ics.textdb.exp.wordcount.WordCountOperatorPredicate;
 import junit.framework.Assert;
@@ -215,10 +218,28 @@ public class PredicateBaseTest {
         testPredicate(wordCountPredicate);
     }
 
+    @Test
     public void testExcelSink() throws Exception {
     	ExcelSinkPredicate excelSinkPredicate = new ExcelSinkPredicate(10, 10);
     	testPredicate(excelSinkPredicate);
-      
+    }
+    
+    @Test
+    public void testAsterixSource() throws Exception {
+        TestUtils.testJsonSerialization(new AsterixSourcePredicate(
+                "host", 19002, "twitter", "ds_tweet", "text", "zika", 10), true);
+    }
+    
+    @Test
+    public void testTwitterConverter() throws Exception {
+        TestUtils.testJsonSerialization(new TwitterConverterPredicate(
+                "rawData"), true);
+    }
+    
+    @Test
+    public void testTableSink() throws Exception {
+        TestUtils.testJsonSerialization(new TableSinkPredicate(
+                "tableName", null), true);
     }
 
 }

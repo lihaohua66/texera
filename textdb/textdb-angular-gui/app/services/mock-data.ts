@@ -219,6 +219,55 @@ let projection = {
   }
 }
 
+let twitterConverter = {
+  top : 20,
+  left : 20,
+  properties : {
+    title : 'TwitterConverter',
+    inputs : {
+      input_1 : {
+        label : "Input (:i)",
+      }
+    },
+    outputs : {
+      output_1 : {
+        label : "Output (:i)",
+      }
+    },
+    attributes : {
+        "operatorType":"TwitterConverter",
+        "rawDataAttribute":"rawData"
+    }
+  }
+}
+
+let asterixSource = {
+  top : 20,
+  left : 20,
+  properties : {
+    title : 'AsterixSource',
+    inputs : {
+      input_1 : {
+        label : "Input (:i)",
+      }
+    },
+    outputs : {
+      output_1 : {
+        label : "Output (:i)",
+      }
+    },
+    attributes : {
+        "operatorType": "AsterixSource",
+        "host": "localhost",
+        "port": 19002,
+        "dataverse": "twitter",
+        "dataset": "ds_tweet",
+        "queryField": "text",
+        "query": "zika"
+    }
+  }
+}
+
 let scanSource = {
   top : 20,
   left : 20,
@@ -496,6 +545,28 @@ let excelSink = {
   }
 }
 
+let writeTable = {
+  top : 20,
+  left : 20,
+  properties : {
+    title : 'Write to Table',
+    inputs : {
+      input_1 : {
+        label : "Input (:i)",
+      }
+    },
+    outputs : {
+      output_1 : {
+        label : "Output (:i)",
+      }
+    },
+    attributes : {
+        "operatorType":"WriteTable",
+        "tableName":"tableName"
+    }
+  }
+}
+
 export const DEFAULT_MATCHERS: Data[] = [
     {id: 0, jsonData: regexMatcher},
     {id: 1, jsonData: keywordMatcher},
@@ -516,6 +587,6 @@ export const DEFAULT_MATCHERS: Data[] = [
     {id: 16, jsonData: wordCountSource},
     {id: 17, jsonData: wordCount},
     {id: 19, jsonData: result},
-    {id: 20, jsonData: excelSink}
-
+    {id: 20, jsonData: excelSink},
+    
 ];
