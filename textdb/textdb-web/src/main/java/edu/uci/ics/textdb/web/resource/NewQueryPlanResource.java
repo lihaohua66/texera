@@ -71,7 +71,7 @@ public class NewQueryPlanResource {
             
         } catch ( IOException | RuntimeException e) {
             // TODO remove RuntimeException after the exception refactor
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new TextdbWebException(e.getMessage());
         }   
     }
