@@ -18,7 +18,7 @@ let keywordMatcher = {
     attributes: {
       "operatorType": "KeywordMatcher",
       "attributes": [],
-      "query": "keyword",
+      "keyword": "keyword",
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
       "spanListName": " "
@@ -258,12 +258,12 @@ let asterixSource = {
     },
     attributes : {
         "operatorType": "AsterixSource",
-        "host": "localhost",
+        "host": "textdb.ics.uci.edu",
         "port": 19002,
         "dataverse": "twitter",
         "dataset": "ds_tweet",
         "queryField": "text",
-        "query": "zika",
+        "keyword": "zika",
         "limit": 10000,
     }
   }
@@ -286,7 +286,7 @@ let scanSource = {
     },
     attributes : {
       "operatorType": "ScanSource",
-      "tableName": ""
+      "table": ""
     }
   }
 }
@@ -308,9 +308,9 @@ let keywordSource = {
     },
     attributes : {
       "operatorType": "KeywordSource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
-      "query": "keyword",
+      "keyword": "keyword",
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
       "spanListName": " "
@@ -336,7 +336,7 @@ let dictionarySource = {
     },
     attributes : {
       "operatorType": "DictionarySource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
       "dictionaryEntries": ["entry1", "entry2"],
       "luceneAnalyzer": "standard",
@@ -363,7 +363,7 @@ let regexSource = {
     },
     attributes : {
       "operatorType": "RegexSource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
       "regex": "regex",
       "regexIgnoreCase": false,
@@ -390,7 +390,7 @@ let fuzzyTokenSource = {
     },
     attributes : {
       "operatorType": "FuzzyTokenSource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
       "query": "token1 token2 token3",
       "luceneAnalyzer": "standard",
@@ -417,7 +417,7 @@ let wordCountSource = {
     },
     attributes : {
         "operatorType": "WordCountIndexSource",
-        "tableName": "",
+        "table": "",
         "attribute": "",
     }
   }
@@ -587,7 +587,7 @@ let writeTable = {
     },
     attributes : {
         "operatorType":"WriteTable",
-        "tableName":"tableName"
+        "writeToTable":"table"
     }
   }
 }
@@ -609,10 +609,10 @@ let asterixSink = {
     },
     attributes : {
         "operatorType": "WriteAsterix",
-        "host": "localhost",
+        "host": "textdb.ics.uci.edu",
         "port": 19002,
         "dataverse": "twitter",
-        "dataset": "ds_tweet_test"
+        "dataset": "ds_tweet_analyzed"
     }
   }
 }
