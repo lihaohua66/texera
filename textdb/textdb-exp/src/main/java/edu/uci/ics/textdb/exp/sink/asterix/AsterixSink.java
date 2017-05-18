@@ -1,5 +1,11 @@
 package edu.uci.ics.textdb.exp.sink.asterix;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -9,9 +15,11 @@ import edu.uci.ics.textdb.api.dataflow.IOperator;
 import edu.uci.ics.textdb.api.dataflow.ISink;
 import edu.uci.ics.textdb.api.exception.DataFlowException;
 import edu.uci.ics.textdb.api.exception.TextDBException;
+import edu.uci.ics.textdb.api.schema.AttributeType;
 import edu.uci.ics.textdb.api.schema.Schema;
 import edu.uci.ics.textdb.api.tuple.Tuple;
 import edu.uci.ics.textdb.exp.source.asterix.AsterixSource;
+import edu.uci.ics.textdb.exp.twitter.TwitterConverterConstants;
 
 public class AsterixSink implements ISink {
     
@@ -83,8 +91,8 @@ public class AsterixSink implements ISink {
             }
             String rawData = tuple.getField(AsterixSource.RAW_DATA).getValue().toString();
             String rawDataAdm = transformRawData(rawData);
-            System.out.println(rawDataAdm);
-            queryString += rawDataAdm + ",";
+            
+            queryString += addAttrIntoAdm(rawDataAdm, tuple) + ",";
         }
         queryString += "]);\n";
         
@@ -111,6 +119,30 @@ public class AsterixSink implements ISink {
                 + "create_at\":datetime(\"" + splitList[1].substring(0, 25) + ")"+splitList[1].substring(25)
                 + "create_at\":date(\"" + splitList[2].substring(0, 11) + ")" + splitList[2].substring(11); 
         return rawDataAdm;
+    }
+    
+    private String addAttrIntoAdm(String admData, Tuple tuple) {
+
+        List<String> newAttributes = tuple.getSchema().getAttributes().stream()
+                .filter(attr -> ! attr.getAttributeType().equals(AttributeType.LIST))
+                .filter(attr -> ! attr.getAttributeType().equals(AttributeType._ID_TYPE))
+                .filter(attr -> ! attr.getAttributeName().equals(AsterixSource.RAW_DATA))
+                .filter(attr -> ! TwitterConverterConstants.additionalAttributes.contains(attr))
+                .map(attr -> attr.getAttributeName())
+                .collect(Collectors.toList());
+        
+        ObjectNode objectNode = new ObjectMapper().createObjectNode();
+        for (String newAttr : newAttributes) {
+            objectNode.set(newAttr, JsonNodeFactory.instance.pojoNode(tuple.getField(newAttr).getValue()));
+        }
+        
+        String newDataStr = objectNode.toString();
+        // replace the trailing "}" with ","
+        newDataStr = newDataStr.substring(0, newDataStr.length() - 1) + ",";
+        // remove the front "{"
+        admData = admData.substring(1);
+        
+        return newDataStr + admData;
     }
 
     @Override
