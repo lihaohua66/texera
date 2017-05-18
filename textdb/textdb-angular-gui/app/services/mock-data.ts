@@ -591,6 +591,31 @@ let writeTable = {
   }
 }
 
+let asterixSink = {
+  top : 20,
+  left : 20,
+  properties : {
+    title : 'AsterixSink',
+    inputs : {
+      input_1 : {
+        label : "Input (:i)",
+      }
+    },
+    outputs : {
+      output_1 : {
+        label : "Output (:i)",
+      }
+    },
+    attributes : {
+        "operatorType": "WriteAsterix",
+        "host": "localhost",
+        "port": 19002,
+        "dataverse": "twitter",
+        "dataset": "ds_tweet_test"
+    }
+  }
+}
+
 export const DEFAULT_MATCHERS: Data[] = [
     {id: 0, jsonData: regexMatcher},
     {id: 1, jsonData: keywordMatcher},
@@ -616,5 +641,6 @@ export const DEFAULT_MATCHERS: Data[] = [
     {id: 22, jsonData: asterixSource},
     {id: 23, jsonData: twitterConverter},
     {id: 24, jsonData: writeTable},
+    {id: 25, jsonData: asterixSink},
 
 ];

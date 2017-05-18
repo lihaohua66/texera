@@ -100,7 +100,7 @@ public class AsterixSource implements ISourceOperator {
         if (cursor < resultJsonArray.length()) {
             Tuple tuple =  new Tuple(ATERIX_SOURCE_SCHEMA, 
                     IDField.newRandomID(),
-                    new TextField(resultJsonArray.get(cursor).toString()));
+                    new TextField(resultJsonArray.getJSONObject(cursor).get("ds").toString()));
             cursor ++;
             return tuple;
         }

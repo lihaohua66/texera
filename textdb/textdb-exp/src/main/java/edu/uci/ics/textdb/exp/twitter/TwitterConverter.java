@@ -71,7 +71,7 @@ public class TwitterConverter implements IOperator {
     
     private List<IField> generateFieldsFromJson(String rawJsonData) {
         try {
-            JsonNode tweet = new ObjectMapper().readTree(rawJsonData).get("ds");
+            JsonNode tweet = new ObjectMapper().readTree(rawJsonData);
             String text = tweet.get("text").asText();
             Long id = tweet.get("id").asLong();
             String tweetLink = "https://twitter.com/statuses/" + id;

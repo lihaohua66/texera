@@ -21,6 +21,7 @@ import edu.uci.ics.textdb.exp.regexmatcher.RegexPredicate;
 import edu.uci.ics.textdb.exp.regexmatcher.RegexSourcePredicate;
 import edu.uci.ics.textdb.exp.regexsplit.RegexSplitPredicate;
 import edu.uci.ics.textdb.exp.sampler.SamplerPredicate;
+import edu.uci.ics.textdb.exp.sink.asterix.AsterixSinkPredicate;
 import edu.uci.ics.textdb.exp.sink.excel.ExcelSinkPredicate;
 import edu.uci.ics.textdb.exp.sink.table.TableSinkPredicate;
 import edu.uci.ics.textdb.exp.sink.tuple.TupleSinkPredicate;
@@ -72,6 +73,7 @@ public class OperatorArityConstants {
         fixedInputArityMap.put(TupleSinkPredicate.class, 1);
         fixedInputArityMap.put(ExcelSinkPredicate.class, 1);
         fixedInputArityMap.put(TableSinkPredicate.class, 1);
+        fixedInputArityMap.put(AsterixSinkPredicate.class, 1);
 
     }
     
@@ -107,6 +109,7 @@ public class OperatorArityConstants {
         fixedOutputArityMap.put(TupleSinkPredicate.class, 0);
         fixedOutputArityMap.put(ExcelSinkPredicate.class, 0);
         fixedOutputArityMap.put(TableSinkPredicate.class, 0);
+        fixedOutputArityMap.put(AsterixSinkPredicate.class, 0);
 
     }
     
