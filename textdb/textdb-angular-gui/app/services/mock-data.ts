@@ -119,9 +119,9 @@ let nlpEntity = {
     },
     attributes : {
       "operatorType": "NlpEntity",
-      "attributes": [],
+      "attributes": ["text"],
       "nlpEntityType": "location",
-      "resultAttribute": " "
+      "resultAttribute": "location"
     }
   }
 }
