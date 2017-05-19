@@ -7,6 +7,7 @@ import com.github.dirkraft.dropwizard.fileassets.FileAssetsBundle;
 import edu.uci.ics.textdb.perftest.sample.SampleExtraction;
 import edu.uci.ics.textdb.perftest.twitter.TwitterSample;
 import edu.uci.ics.textdb.web.healthcheck.SampleHealthCheck;
+import edu.uci.ics.textdb.web.resource.DownloadFileResource;
 import edu.uci.ics.textdb.web.resource.NewQueryPlanResource;
 import edu.uci.ics.textdb.web.resource.PlanStoreResource;
 import edu.uci.ics.textdb.web.resource.SystemResource;
@@ -36,6 +37,9 @@ public class TextdbWebApplication extends Application<TextdbWebConfiguration> {
     public void run(TextdbWebConfiguration textdbWebConfiguration, Environment environment) throws Exception {
         // serve backend at /api
         environment.jersey().setUrlPattern("/api/*");
+        
+        final DownloadFileResource downloadFileResource = new DownloadFileResource();
+        environment.jersey().register(downloadFileResource);
         
         final NewQueryPlanResource newQueryPlanResource = new NewQueryPlanResource();
         environment.jersey().register(newQueryPlanResource);

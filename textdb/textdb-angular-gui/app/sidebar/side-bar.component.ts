@@ -1,4 +1,6 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
+import { Response, Http } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 import { CurrentDataService } from '../services/current-data-service';
 import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
@@ -19,6 +21,7 @@ declare var PrettyJSON: any;
 export class SideBarComponent {
   data: any;
   attributes: string[] = [];
+  currentResultTimeStamp: string = "";
 
   operatorId: number;
   operatorTitle: string;
@@ -50,6 +53,19 @@ export class SideBarComponent {
   ModalClose() {
     this.modal.close();
   }
+  
+  downloadExcel() {
+    if (this.currentResultTimeStamp === "") {
+      console.log("currentResultTimeStamp is empty")
+    } else {
+      console.log("proceed to http request")
+      let downloadUrl = "http://textdb.ics.uci.edu:1200/api/download/" + this.currentResultTimeStamp;
+      console.log(downloadUrl)
+      this.http.get(downloadUrl).toPromise().then(function(data) {
+        window.location.href = downloadUrl;
+      });
+    }
+  }
 
   checkInHidden(name: string) {
     return jQuery.inArray(name, this.hiddenList);
@@ -58,7 +74,7 @@ export class SideBarComponent {
     return jQuery.inArray(name, this.selectorList);
   }
 
-  constructor(private currentDataService: CurrentDataService) {
+  constructor(private currentDataService: CurrentDataService, private http: Http) {
     currentDataService.newAddition$.subscribe(
       data => {
         this.data = data.operatorData;
@@ -82,9 +98,13 @@ export class SideBarComponent {
         jQuery.hideLoading();
         console.log(data);
         if (data.code === 0) {
+          var jsonMessage = JSON.parse(data.message);
+          this.currentResultTimeStamp = jsonMessage.timeStamp;
+
+
           var node = new PrettyJSON.view.Node({
             el: jQuery("#elem"),
-            data: JSON.parse(data.message)
+            data: jsonMessage.results
           });
         } else {
           var node = new PrettyJSON.view.Node({

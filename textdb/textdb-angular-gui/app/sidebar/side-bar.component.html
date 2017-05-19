@@ -50,11 +50,12 @@
 <modal #MyModal>
 	<modal-header>
 		<h3>Result</h3>
+    <button type="button" (click)="downloadExcel()" class="btn btn-default">Download as Excel</button>
 	</modal-header>
 	<modal-body class="search-result">
     <div id="elem"></div>
 	</modal-body>
 	<modal-footer>
-		<button type="button" (click)="ModalClose()" class="btn btn-default navbar-btn">X</button>
+		<button type="button" (click)="ModalClose()" class="btn btn-default navbar-btn">Close</button>
 	</modal-footer>
 <modal>

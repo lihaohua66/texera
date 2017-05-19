@@ -6,6 +6,9 @@ import java.util.List;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 
 import edu.uci.ics.textdb.api.utils.TestUtils;
 import edu.uci.ics.textdb.exp.comparablematcher.ComparablePredicate;
@@ -247,6 +250,11 @@ public class PredicateBaseTest {
     @Test
     public void testComparable() throws Exception {
         testPredicate(new ComparablePredicate("attr", ComparisonType.EQUAL_TO, 1));
+        ObjectMapper mapper = new ObjectMapper();
+        // configure mapper, if necessary, then create schema generator
+        JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);
+        JsonSchema schema = schemaGen.generateSchema(ComparablePredicate.class);
+        System.out.println(new ObjectMapper().writeValueAsString(schema));
     }
-
+    
 }

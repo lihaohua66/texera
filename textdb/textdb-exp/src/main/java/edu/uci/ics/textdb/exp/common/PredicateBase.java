@@ -82,7 +82,7 @@ import edu.uci.ics.textdb.exp.wordcount.WordCountOperatorPredicate;
 
         @Type(value = ScanSourcePredicate.class, name = "ScanSource"),
         @Type(value = FileSourcePredicate.class, name = "FileSink"),        
-        @Type(value = TupleSinkPredicate.class, name = "ViewResults"),
+        @Type(value = ExcelSinkPredicate.class, name = "ViewResults"),
         @Type(value = ExcelSinkPredicate.class, name = "ExcelSink"),
         @Type(value = TableSinkPredicate.class, name = "WriteTable"),
         @Type(value = AsterixSinkPredicate.class, name = "WriteAsterix"),

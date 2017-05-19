@@ -24,7 +24,7 @@ public class RegexPredicate extends PredicateBase {
     private final List<String> attributeNames;
     private final String spanListName;
     private final Boolean ignoreCase;
-    
+
     /*
      * This constructor is only for internal use.
      */
@@ -38,7 +38,7 @@ public class RegexPredicate extends PredicateBase {
      * @param regex, the regex to be used
      * @param attributeNames, a list of attribute names to match regex on
      * @param ignoreCase, optional, ignores regex case, default false
-     * @param spanListName, the name of the attribute where the results will be put in
+     * @param resultAttribute, the name of the attribute where the results will be put in
      */
     @JsonCreator
     public RegexPredicate(
@@ -48,7 +48,7 @@ public class RegexPredicate extends PredicateBase {
             List<String> attributeNames,
             @JsonProperty(value = PropertyNameConstants.REGEX_IGNORE_CASE, required = false)
             Boolean ignoreCase,
-            @JsonProperty(value = PropertyNameConstants.SPAN_LIST_NAME, required = true)
+            @JsonProperty(value = PropertyNameConstants.RESULT_ATTRIBUTE_NAME, required = true)
             String spanListName) {
         this.regex = regex;
         this.attributeNames = attributeNames;
