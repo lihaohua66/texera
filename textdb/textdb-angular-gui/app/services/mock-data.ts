@@ -21,7 +21,7 @@ let keywordMatcher = {
       "keyword": "keyword",
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 };
@@ -46,7 +46,7 @@ let regexMatcher = {
       "attributes": [],
       "regex": "regex",
       "regexIgnoreCase": false,
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 };
@@ -72,7 +72,7 @@ let dictionaryMatcher = {
       "dictionaryEntries": ["entry1", "entry2"],
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -98,7 +98,7 @@ let fuzzyMatcher = {
       "query": "token1 token2 token3",
       "luceneAnalyzer": "standard",
       "thresholdRatio": 0.8,
-      "spanListName": " ",
+      "resultAttribute": " ",
     }
   }
 }
@@ -122,7 +122,7 @@ let nlpEntity = {
       "operatorType": "NlpEntity",
       "attributes": [],
       "nlpEntityType": "location",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -313,7 +313,7 @@ let keywordSource = {
       "keyword": "keyword",
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -341,7 +341,7 @@ let dictionarySource = {
       "dictionaryEntries": ["entry1", "entry2"],
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -368,7 +368,7 @@ let regexSource = {
       "regex": "regex",
       "regexIgnoreCase": false,
       "regexUseIndex": true,
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -395,7 +395,7 @@ let fuzzyTokenSource = {
       "query": "token1 token2 token3",
       "luceneAnalyzer": "standard",
       "thresholdRatio": 0.8,
-      "spanListName": " ",
+      "resultAttribute": " ",
     }
   }
 }
