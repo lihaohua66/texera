@@ -1,7 +1,6 @@
 package edu.uci.ics.textdb.exp.source.asterix;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 
@@ -77,14 +76,7 @@ public class AsterixSource implements ISourceOperator {
         if (predicate.getField() != null && predicate.getKeyword() != null) {
             List<String> keywordList = DataflowUtils.tokenizeQuery(
                     LuceneAnalyzerConstants.standardAnalyzerString(), predicate.getKeyword());
-            String asterixKeyword = 
-                    "[" +
-                    keywordList.stream().map(keyword -> "\"" + keyword + "\"")
-                        .collect(Collectors.joining(", ")) +  
-                    "]";
-            String asterixField = "`" + predicate.getField() + "`";
-            sb.append("and ftcontains(" + asDataset + "." + asterixField + ", ");
-            sb.append(asterixKeyword + ", " + "{\"mode\":\"all\"}" + ")").append("\n");
+            sb.append("similarity_jaccard(word_tokens(t.`text`), word_tokens('" + keywordList.get(0) + "')) > 0.0 \n");
         }
         if(predicate.getStartDate() != null){
         	String startDate = predicate.getStartDate();
