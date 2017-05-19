@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
 
-import edu.uci.ics.textdb.api.constants.DataConstants;
 import edu.uci.ics.textdb.api.utils.Utils;
 
 @Path("/download")
@@ -29,7 +28,7 @@ public class DownloadFileResource {
     public Response downloadExcelFile(@PathParam("resultTimeStamp") String resultTimeStamp) {
         System.out.println("resultTimeStamp is " + resultTimeStamp);
         
-        String excelDirectory = Utils.getResourcePath("/index/excel", DataConstants.TextdbProject.TEXTDB_EXP);
+        String excelDirectory = Paths.get(Utils.getTextdbHomePath(), "index", "excel").toString();
         String resultFileName = resultTimeStamp + ".xlsx";
         String excelFilePath = Paths.get(excelDirectory, resultFileName).toString();
         
