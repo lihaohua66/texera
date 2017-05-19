@@ -4,7 +4,7 @@ let keywordMatcher = {
   top: 20,
   left: 20,
   properties: {
-    title: 'KeywordMatcher',
+    title: 'Keyword Search',
     inputs: {
       input_1: {
         label: 'Input (:i)',
@@ -30,7 +30,7 @@ let regexMatcher = {
   top : 20,
   left : 20,
   properties : {
-    title : 'RegexMatcher',
+    title : 'Regex Match',
     inputs : {
       input_1 : {
         label : 'Input(:i)',
@@ -43,9 +43,9 @@ let regexMatcher = {
     },
     attributes : {
       "operatorType": "RegexMatcher",
-      "attributes": ["text"],
-      "regex": "\\$[0-9]+",
-      "resultAttribute": "money"
+      "attributes ": [],
+      "regex": "",
+      "resultAttribute": ""
     }
   }
 };
@@ -54,7 +54,7 @@ let dictionaryMatcher = {
   top : 20,
   left : 20,
   properties : {
-    title : 'DictionaryMatcher',
+    title : 'Dictionary Search',
     inputs : {
       input_1 : {
         label : "Input(:i)",
@@ -80,7 +80,7 @@ let fuzzyMatcher = {
   top : 20,
   left : 20,
   properties : {
-    title : "FuzzyTokenMatcher",
+    title : "Fuzzy Token Match",
     inputs : {
       input_1 : {
         label : "Input(:i)",
@@ -106,7 +106,7 @@ let nlpEntity = {
   top : 20,
   left : 20,
   properties : {
-    title : 'NlpEntity',
+    title : 'Entity Recognition',
     inputs : {
       input_1 : {
         label : 'Input(:i)',
@@ -130,7 +130,7 @@ let nlpSentiment = {
   top : 20,
   left : 20,
   properties : {
-    title : 'NlpSentiment',
+    title : 'Sentiment Analysis',
     inputs : {
       input_1 : {
         label : 'Input(:i)',
@@ -153,7 +153,7 @@ let regexSplit = {
   top : 20,
   left : 20,
   properties : {
-    title : 'RegexSplit',
+    title : 'Split Article',
     inputs : {
       input_1 : {
         label : "Input (:i)",
@@ -177,7 +177,7 @@ let sampler = {
   top : 20,
   left : 20,
   properties : {
-    title : 'Sampler',
+    title : 'Sampling',
     inputs : {
       input_1 : {
         label : "Input (:i)",
@@ -222,7 +222,7 @@ let twitterConverter = {
   top : 20,
   left : 20,
   properties : {
-    title : 'TwitterConverter',
+    title : 'Convert Twitter',
     inputs : {
       input_1 : {
         label : "Input (:i)",
