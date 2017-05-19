@@ -44,9 +44,8 @@ let regexMatcher = {
     attributes : {
       "operatorType": "RegexMatcher",
       "attributes": [],
-      "regex": "regex",
-      "regexIgnoreCase": false,
-      "resultAttribute": " "
+      "regex": "\${1}[0-9]+\.*[0-9]*",
+      "resultAttribute": "money"
     }
   }
 };
@@ -263,8 +262,8 @@ let asterixSource = {
         "dataverse": "twitter",
         "dataset": "ds_tweet",
         "queryField": "text",
-        "keyword": "zika",
-        "limit": 10000,
+        "keyword": "drug",
+        "limit": 100000,
     }
   }
 }
@@ -612,7 +611,7 @@ let asterixSink = {
         "host": "textdb.ics.uci.edu",
         "port": 19002,
         "dataverse": "twitter",
-        "dataset": "ds_tweet_analyzed"
+        "dataset": "ds_tweet_money"
     }
   }
 }
