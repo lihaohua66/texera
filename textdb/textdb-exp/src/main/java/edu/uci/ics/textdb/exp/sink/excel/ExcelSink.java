@@ -30,6 +30,7 @@ import edu.uci.ics.textdb.api.schema.AttributeType;
 import edu.uci.ics.textdb.api.schema.Schema;
 import edu.uci.ics.textdb.api.tuple.Tuple;
 import edu.uci.ics.textdb.api.utils.Utils;
+import edu.uci.ics.textdb.exp.source.asterix.AsterixSource;
 
 /**
  * ExcelSink is a sink that can write a list of tuples into an excel file
@@ -82,6 +83,7 @@ public class ExcelSink implements ISink {
                 .filter(attr -> ! attr.getAttributeName().equalsIgnoreCase(SchemaConstants._ID))
                 .filter(attr -> ! attr.getAttributeName().equalsIgnoreCase(SchemaConstants.PAYLOAD))
                 .filter(attr -> ! attr.getAttributeType().equals(AttributeType.LIST))
+                .filter(attr -> ! attr.getAttributeName().equals(AsterixSource.RAW_DATA))
                 .toArray(Attribute[]::new));
         
         wb = new XSSFWorkbook();
@@ -135,7 +137,7 @@ public class ExcelSink implements ISink {
             }
         }
         
-        Tuple resultTuple = Utils.removeFields(inputTuple, SchemaConstants._ID, SchemaConstants.PAYLOAD);
+        Tuple resultTuple = Utils.removeFields(inputTuple, SchemaConstants._ID, SchemaConstants.PAYLOAD, AsterixSource.RAW_DATA);
     	Row row = sheet.createRow(cursor-predicate.getOffset());
     	
     	for (int i = 0; i < outputSchema.getAttributeNames().size(); i++) {    	    
