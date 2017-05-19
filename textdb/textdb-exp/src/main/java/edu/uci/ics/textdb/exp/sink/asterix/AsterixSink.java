@@ -15,8 +15,10 @@ import edu.uci.ics.textdb.api.dataflow.IOperator;
 import edu.uci.ics.textdb.api.dataflow.ISink;
 import edu.uci.ics.textdb.api.exception.DataFlowException;
 import edu.uci.ics.textdb.api.exception.TextDBException;
+import edu.uci.ics.textdb.api.field.ListField;
 import edu.uci.ics.textdb.api.schema.AttributeType;
 import edu.uci.ics.textdb.api.schema.Schema;
+import edu.uci.ics.textdb.api.span.Span;
 import edu.uci.ics.textdb.api.tuple.Tuple;
 import edu.uci.ics.textdb.exp.source.asterix.AsterixSource;
 import edu.uci.ics.textdb.exp.twitter.TwitterConverterConstants;
@@ -121,6 +123,7 @@ public class AsterixSink implements ISink {
         return rawDataAdm;
     }
     
+    @SuppressWarnings("unchecked")
     private String addAttrIntoAdm(String admData, Tuple tuple) {
 
         List<String> newAttributes = tuple.getSchema().getAttributes().stream()
@@ -134,6 +137,24 @@ public class AsterixSink implements ISink {
         ObjectNode objectNode = new ObjectMapper().createObjectNode();
         for (String newAttr : newAttributes) {
             objectNode.set(newAttr, JsonNodeFactory.instance.pojoNode(tuple.getField(newAttr).getValue()));
+        }
+        
+        // add "money" attribute if it's present
+        String MONEY_FIELD = "money";
+        if (tuple.getSchema().containsField(MONEY_FIELD) 
+                || tuple.getSchema().getAttribute(MONEY_FIELD).getAttributeType().equals(AttributeType.LIST)) {
+            int totalMoney = 0;
+            ListField<Span> moneyField = (ListField<Span>) tuple.getField(MONEY_FIELD);
+            for (Span span : moneyField.getValue()) {
+                String value = span.getValue();
+                try {
+                    totalMoney += Double.valueOf(Double.parseDouble(value.substring(1).trim())).intValue();
+                } catch (NumberFormatException e) {
+                    // log and do nothing
+                    System.out.println("cannot parse money: " + e.getMessage());
+                }
+            }
+            objectNode.set(MONEY_FIELD, JsonNodeFactory.instance.pojoNode(totalMoney));
         }
         
         String newDataStr = objectNode.toString();

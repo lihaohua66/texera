@@ -101,7 +101,7 @@ public class TwitterConverter implements IOperator {
                     new TextField(city),
                     new StringField(createAt));
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("cannot convert tweet, skipping");
             return Arrays.asList();
         }
     }
