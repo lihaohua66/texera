@@ -72,23 +72,23 @@ public class AsterixSource implements ISourceOperator {
         sb.append("use " + predicate.getDataverse() + ';').append("\n");
         sb.append("select * ").append("\n");
         sb.append("from " + predicate.getDataset() + " as " + asDataset).append("\n");
-        sb.append("where true").append("\n");
+        sb.append("where true ").append("\n");
         if (predicate.getField() != null && predicate.getKeyword() != null) {
             List<String> keywordList = DataflowUtils.tokenizeQuery(
                     LuceneAnalyzerConstants.standardAnalyzerString(), predicate.getKeyword());
-            sb.append("similarity_jaccard(word_tokens(t.`text`), word_tokens('" + keywordList.get(0) + "')) > 0.0 \n");
+            sb.append(" and similarity_jaccard(word_tokens(t.`text`), word_tokens('" + keywordList.get(0) + "')) > 0.0 \n");
         }
         if(predicate.getStartDate() != null){
         	String startDate = predicate.getStartDate();
-        	sb.append("and create_at >= datetime(\""+startDate +"T00:00:04.000Z\")").append("\n");
+        	sb.append(" and create_at >= datetime(\""+startDate +"T00:00:04.000Z\")").append("\n");
         }
         if(predicate.getEndDate() != null){
         	String endDate = predicate.getEndDate();
         	
-        	sb.append("and create_at <= datetime(\""+endDate +"T00:00:04.000Z\")").append("\n");
+        	sb.append(" and create_at <= datetime(\""+endDate +"T00:00:04.000Z\")").append("\n");
         }
         if (predicate.getLimit() != null) {
-            sb.append("limit " + predicate.getLimit()).append("\n");
+            sb.append(" limit " + predicate.getLimit()).append("\n");
         }
         sb.append(";");
         System.out.println(sb.toString());//DEBUG
