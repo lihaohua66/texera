@@ -75,8 +75,20 @@ public class AsterixSink implements ISink {
         queryString += "use " + predicate.getDataverse() + ";\n";
         // drop dataset ds if exists
         queryString += "drop dataset " + predicate.getDataset() + " if exists" + ";\n";
+        queryString += "create type typeTweetMoney if not exists as open{\n" + 
+                "    create_at : datetime,\n" + 
+                "    id: int64,\n" + 
+                "    \"text\": string,\n" + 
+                "    retweet_count : int64,\n" + 
+                "    lang : string,\n" + 
+                "    is_retweet: boolean,\n" + 
+                "    hashtags : {{ string }} ?,\n" + 
+                "    user_mentions : {{ int64 }} ? ,\n" + 
+                "    user : typeUser,\n" + 
+                "    geo_tag: typeGeoTag\n" + 
+                "}";
         // create dataset ds(typeTweet) primary key id
-        queryString += "create dataset " + predicate.getDataset() + "(typeTweet) " + "primary key id" + ";\n";
+        queryString += "create dataset " + predicate.getDataset() + "(typeTweetMoney) " + "primary key id" + ";\n";
         // create index text_idx on ds_tweet("text") type fulltext;
         queryString += "create index text_idx on " + predicate.getDataset() + "(text) " + "type fulltext" + ";\n";
         return queryString;
@@ -106,7 +118,7 @@ public class AsterixSink implements ISink {
                     .asJson();
             // if status is not 200 OK, throw exception
             if (jsonResponse.getStatus() != 200) {
-                throw new DataFlowException("Send create dataset query to asterix failed: " + 
+                throw new DataFlowException("Send insert data query to asterix failed: " + 
                         "error status: " + jsonResponse.getStatusText() + ", " + 
                         "error body: " + jsonResponse.getBody().toString());
             }
