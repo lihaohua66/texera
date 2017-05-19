@@ -117,6 +117,7 @@ public class AsterixSink implements ISink {
             // if status is not 200 OK, throw exception
             if (jsonResponse.getStatus() != 200) {
                 throw new DataFlowException("Send insert data query to asterix failed: " + 
+                        "insert query is : \n" + queryString + ",\n" + 
                         "error status: " + jsonResponse.getStatusText() + ", " + 
                         "error body: " + jsonResponse.getBody().toString());
             }
@@ -153,7 +154,7 @@ public class AsterixSink implements ISink {
         // add "money" attribute if it's present
         String MONEY_FIELD = "money";
         if (tuple.getSchema().containsField(MONEY_FIELD) 
-                || tuple.getSchema().getAttribute(MONEY_FIELD).getAttributeType().equals(AttributeType.LIST)) {
+               && tuple.getSchema().getAttribute(MONEY_FIELD).getAttributeType().equals(AttributeType.LIST)) {
             int totalMoney = 0;
             ListField<Span> moneyField = (ListField<Span>) tuple.getField(MONEY_FIELD);
             for (Span span : moneyField.getValue()) {
@@ -165,7 +166,7 @@ public class AsterixSink implements ISink {
                     System.out.println("cannot parse money: " + e.getMessage());
                 }
             }
-            objectNode.set(MONEY_FIELD, JsonNodeFactory.instance.pojoNode(totalMoney));
+            objectNode.put(MONEY_FIELD, totalMoney);
         }
         
         String newDataStr = objectNode.toString();
