@@ -86,7 +86,7 @@ public class AsterixSink implements ISink {
                 "    user_mentions : {{ int64 }} ? ,\n" + 
                 "    user : typeUser,\n" + 
                 "    geo_tag: typeGeoTag\n" + 
-                "}";
+                "}; ";
         // create dataset ds(typeTweet) primary key id
         queryString += "create dataset " + predicate.getDataset() + "(typeTweetMoney) " + "primary key id" + ";\n";
         // create index text_idx on ds_tweet("text") type fulltext;
