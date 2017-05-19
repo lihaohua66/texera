@@ -59,6 +59,7 @@ public class AsterixSink implements ISink {
             // if status is not 200 OK, throw exception
             if (jsonResponse.getStatus() != 200) {
                 throw new DataFlowException("Send create dataset query to asterix failed: " + 
+                        "query is: " + prepareDatasetStatement + ", " +
                         "error status: " + jsonResponse.getStatusText() + ", " + 
                         "error body: " + jsonResponse.getBody().toString());
             }
