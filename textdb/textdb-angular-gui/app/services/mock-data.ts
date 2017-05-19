@@ -43,9 +43,9 @@ let regexMatcher = {
     },
     attributes : {
       "operatorType": "RegexMatcher",
-      "attributes ": [],
-      "regex": "",
-      "resultAttribute": ""
+      "attributes": ["text"],
+      "regex": "\\$[0-9]+",
+      "resultAttribute": "money"
     }
   }
 };
