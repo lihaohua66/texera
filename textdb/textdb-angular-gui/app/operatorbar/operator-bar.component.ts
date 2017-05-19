@@ -18,7 +18,7 @@ export class OperatorBarComponent {
   initialize() {
     var container = jQuery('#the-flowchart').parent();
 
-    this.initializePanzoom(container);
+    // this.initializePanzoom(container);
     this.initializeOperators(container);
   }
 

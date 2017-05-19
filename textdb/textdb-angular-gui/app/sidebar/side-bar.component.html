@@ -32,7 +32,7 @@
                 </div>
 
 
-                <select *ngIf="attribute === 'tableName'" class="form-control" id="{{attribute}}" [(ngModel)]="data.properties.attributes[attribute]" (ngModelChange)="getAttributesForTable($event)" name="{{attribute}}" #{{attribute}}="ngModel">
+                <select *ngIf="attribute === 'table'" class="form-control" id="{{attribute}}" [(ngModel)]="data.properties.attributes[attribute]" (ngModelChange)="getAttributesForTable($event)" name="{{attribute}}" #{{attribute}}="ngModel">
                     <option selected hidden value="">Select table</option>
                     <option *ngFor="let tableName of tableNameItems" [value] = "tableName">{{tableName}}</option>
                 </select>

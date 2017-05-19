@@ -18,10 +18,10 @@ let keywordMatcher = {
     attributes: {
       "operatorType": "KeywordMatcher",
       "attributes": [],
-      "query": "keyword",
+      "keyword": "keyword",
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 };
@@ -46,7 +46,7 @@ let regexMatcher = {
       "attributes": [],
       "regex": "regex",
       "regexIgnoreCase": false,
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 };
@@ -72,7 +72,7 @@ let dictionaryMatcher = {
       "dictionaryEntries": ["entry1", "entry2"],
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -98,7 +98,7 @@ let fuzzyMatcher = {
       "query": "token1 token2 token3",
       "luceneAnalyzer": "standard",
       "thresholdRatio": 0.8,
-      "spanListName": " ",
+      "resultAttribute": " ",
     }
   }
 }
@@ -122,7 +122,7 @@ let nlpEntity = {
       "operatorType": "NlpEntity",
       "attributes": [],
       "nlpEntityType": "location",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -258,12 +258,12 @@ let asterixSource = {
     },
     attributes : {
         "operatorType": "AsterixSource",
-        "host": "localhost",
+        "host": "textdb.ics.uci.edu",
         "port": 19002,
         "dataverse": "twitter",
         "dataset": "ds_tweet",
         "queryField": "text",
-        "query": "zika",
+        "keyword": "zika",
         "limit": 10000,
     }
   }
@@ -286,7 +286,7 @@ let scanSource = {
     },
     attributes : {
       "operatorType": "ScanSource",
-      "tableName": ""
+      "table": ""
     }
   }
 }
@@ -308,12 +308,12 @@ let keywordSource = {
     },
     attributes : {
       "operatorType": "KeywordSource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
-      "query": "keyword",
+      "keyword": "keyword",
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -336,12 +336,12 @@ let dictionarySource = {
     },
     attributes : {
       "operatorType": "DictionarySource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
       "dictionaryEntries": ["entry1", "entry2"],
       "luceneAnalyzer": "standard",
       "matchingType": "phrase",
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -363,12 +363,12 @@ let regexSource = {
     },
     attributes : {
       "operatorType": "RegexSource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
       "regex": "regex",
       "regexIgnoreCase": false,
       "regexUseIndex": true,
-      "spanListName": " "
+      "resultAttribute": " "
     }
   }
 }
@@ -390,12 +390,12 @@ let fuzzyTokenSource = {
     },
     attributes : {
       "operatorType": "FuzzyTokenSource",
-      "tableName": "",
+      "table": "",
       "attributes": [],
       "query": "token1 token2 token3",
       "luceneAnalyzer": "standard",
       "thresholdRatio": 0.8,
-      "spanListName": " ",
+      "resultAttribute": " ",
     }
   }
 }
@@ -417,7 +417,7 @@ let wordCountSource = {
     },
     attributes : {
         "operatorType": "WordCountIndexSource",
-        "tableName": "",
+        "table": "",
         "attribute": "",
     }
   }
@@ -587,7 +587,7 @@ let writeTable = {
     },
     attributes : {
         "operatorType":"WriteTable",
-        "tableName":"tableName"
+        "writeToTable":"table"
     }
   }
 }
@@ -609,10 +609,10 @@ let asterixSink = {
     },
     attributes : {
         "operatorType": "WriteAsterix",
-        "host": "localhost",
+        "host": "textdb.ics.uci.edu",
         "port": 19002,
         "dataverse": "twitter",
-        "dataset": "ds_tweet_test"
+        "dataset": "ds_tweet_analyzed"
     }
   }
 }
