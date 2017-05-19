@@ -77,6 +77,9 @@ public class PropertyNameConstants {
     public static final String ASTERIX_DATAVERSE = "dataverse";
     public static final String ASTERIX_DATASET = "dataset";
     public static final String ASTERIX_QUERY_FIELD = "queryField";
+    public static final String ASTERIX_START_DATE = "startDate";
+    public static final String ASTERIX_END_DATE = "endDate";
+
     
     // related to twitter converter
     public static final String TWITTER_RAW_ATTRIBUTE = "rawDataAttribute";
