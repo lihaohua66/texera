@@ -132,6 +132,9 @@ public class AsterixSink implements ISink {
         rawDataAdm += splitList[0]  
                 + "create_at\":datetime(\"" + splitList[1].substring(0, 25) + ")"+splitList[1].substring(25)
                 + "create_at\":date(\"" + splitList[2].substring(0, 11) + ")" + splitList[2].substring(11); 
+        
+        rawDataAdm.replace("[", "{{");
+        rawDataAdm.replace("]", "}}");
         return rawDataAdm;
     }
     
