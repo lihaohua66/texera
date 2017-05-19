@@ -43,8 +43,8 @@ let regexMatcher = {
     },
     attributes : {
       "operatorType": "RegexMatcher",
-      "attributes": [],
-      "regex": "\${1}[0-9]+\.*[0-9]*",
+      "attributes": ["text"],
+      "regex": "\\$[0-9]+",
       "resultAttribute": "money"
     }
   }
