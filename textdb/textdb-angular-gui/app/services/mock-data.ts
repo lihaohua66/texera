@@ -143,7 +143,7 @@ let nlpSentiment = {
     },
     attributes : {
       "operatorType": "NlpSentiment",
-      "attributes": ["text"],
+      "attribute": "text",
       "resultAttribute": "sentiment"
     }
   }
