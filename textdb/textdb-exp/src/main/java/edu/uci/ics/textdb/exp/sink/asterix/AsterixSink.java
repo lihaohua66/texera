@@ -78,7 +78,7 @@ public class AsterixSink implements ISink {
         queryString += "create type typeTweetMoney if not exists as open{\n" + 
                 "    create_at : datetime,\n" + 
                 "    id: int64,\n" + 
-                "    \"text\": string,\n" + 
+                "    `text`: string,\n" + 
                 "    retweet_count : int64,\n" + 
                 "    lang : string,\n" + 
                 "    is_retweet: boolean,\n" + 
