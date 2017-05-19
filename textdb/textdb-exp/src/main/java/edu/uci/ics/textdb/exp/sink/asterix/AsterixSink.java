@@ -82,7 +82,6 @@ public class AsterixSink implements ISink {
                 "    retweet_count : int64,\n" + 
                 "    lang : string,\n" + 
                 "    is_retweet: boolean,\n" + 
-                "    hashtags : {{ string }} ?,\n" + 
                 "    user_mentions : {{ int64 }} ? ,\n" + 
                 "    user : typeUser,\n" + 
                 "    geo_tag: typeGeoTag\n" + 
