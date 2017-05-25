@@ -94,7 +94,7 @@ public class AsterixSink implements ISink {
     
     @Override
     public void processTuples() throws TextDBException {
-        String queryString = prepareAsterixDataset();
+        String queryString = "";
         queryString += "use " + predicate.getDataverse() + ";\n";
         queryString += "insert into " + predicate.getDataset() + "([";
         Tuple tuple;
