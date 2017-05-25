@@ -94,36 +94,37 @@ public class AsterixSink implements ISink {
     
     @Override
     public void processTuples() throws TextDBException {
-        String queryString = "";
-        queryString += "use " + predicate.getDataverse() + ";\n";
-        queryString += "insert into " + predicate.getDataset() + "([";
+        String queryStringHeader = "";
+        queryStringHeader += "use " + predicate.getDataverse() + ";\n";
+        queryStringHeader += "insert into " + predicate.getDataset() + "([";
+        String queryStringFooter = "]);\n";
+        
         Tuple tuple;
         while ((tuple = inputOperator.getNextTuple()) != null) {
             if (! tuple.getSchema().containsField(AsterixSource.RAW_DATA)) {
                 throw new DataFlowException("tuple doesn't have rawData field");
             }
             String rawData = tuple.getField(AsterixSource.RAW_DATA).getValue().toString();
-            String rawDataAdm = transformRawData(rawData);
+            String admData = addAttrIntoAdm(transformRawData(rawData), tuple);
+            String queryString = queryStringHeader + admData + queryStringFooter;
             
-            queryString += addAttrIntoAdm(rawDataAdm, tuple) + ",";
-        }
-        queryString += "]);\n";
-        
-        try {
-            HttpResponse<JsonNode> jsonResponse = Unirest.post(asterixAddress)
-                    .queryString("statement", queryString)
-                    .field("mode", "immediate")
-                    .asJson();
-            // if status is not 200 OK, throw exception
-            if (jsonResponse.getStatus() != 200) {
-                throw new DataFlowException("Send insert data query to asterix failed: " + 
-                        "insert query is : \n" + queryString + ",\n" + 
-                        "error status: " + jsonResponse.getStatusText() + ", " + 
-                        "error body: " + jsonResponse.getBody().toString());
+            try {
+                HttpResponse<JsonNode> jsonResponse = Unirest.post(asterixAddress)
+                        .queryString("statement", queryString)
+                        .field("mode", "immediate")
+                        .asJson();
+                // if status is not 200 OK, throw exception
+                if (jsonResponse.getStatus() != 200) {
+                    throw new DataFlowException("Send insert data query to asterix failed: " + 
+                            "insert query is : \n" + queryString + ",\n" + 
+                            "error status: " + jsonResponse.getStatusText() + ", " + 
+                            "error body: " + jsonResponse.getBody().toString());
+                }
+            // ignore all exceptions, print and continue
+            } catch (UnirestException | DataFlowException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (UnirestException e) {
-            throw new DataFlowException(e);
-        }
+        }        
     }
     
     private String transformRawData(String rawData) {
@@ -140,7 +141,6 @@ public class AsterixSink implements ISink {
     
     @SuppressWarnings("unchecked")
     private String addAttrIntoAdm(String admData, Tuple tuple) {
-
         List<String> newAttributes = tuple.getSchema().getAttributes().stream()
                 .filter(attr -> ! attr.getAttributeType().equals(AttributeType.LIST))
                 .filter(attr -> ! attr.getAttributeType().equals(AttributeType._ID_TYPE))
