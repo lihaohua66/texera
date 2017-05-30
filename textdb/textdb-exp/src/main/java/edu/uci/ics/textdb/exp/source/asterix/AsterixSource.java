@@ -83,8 +83,8 @@ public class AsterixSource implements ISourceOperator {
                         .collect(Collectors.joining(", ")) +  
                     "]";
             String asterixField = "`" + predicate.getField() + "`";
-            sb.append("and ftcontains(" + asDataset + "." + asterixField + ", ");
-            sb.append(asterixKeyword + ", " + "{\"mode\":\"all\"}" + ")").append("\n");
+            sb.append("and similarity_jaccard(word_tokens(" + asDataset + "." + asterixField + "), ");
+            sb.append("word_tokens('" + asterixKeyword + "')) > 0.0").append("\n");
         }
         if(predicate.getStartDate() != null){
         	String startDate = predicate.getStartDate();

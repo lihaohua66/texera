@@ -1,3 +1,3 @@
 cd $TEXTDB_HOME
-mvn install -DskipTests
+mvn clean install -DskipTests
 ./textdb-scripts/gui.sh
