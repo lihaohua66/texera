@@ -1,8 +1,5 @@
 package edu.uci.ics.textdb.exp.source.asterix;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.json.JSONArray;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -21,8 +18,6 @@ import edu.uci.ics.textdb.api.schema.Attribute;
 import edu.uci.ics.textdb.api.schema.AttributeType;
 import edu.uci.ics.textdb.api.schema.Schema;
 import edu.uci.ics.textdb.api.tuple.Tuple;
-import edu.uci.ics.textdb.exp.utils.DataflowUtils;
-import edu.uci.ics.textdb.storage.constants.LuceneAnalyzerConstants;
 
 public class AsterixSource implements ISourceOperator {
     
@@ -75,16 +70,9 @@ public class AsterixSource implements ISourceOperator {
         sb.append("from " + predicate.getDataset() + " as " + asDataset).append("\n");
         sb.append("where true").append("\n");
         if (predicate.getField() != null && predicate.getKeyword() != null) {
-            List<String> keywordList = DataflowUtils.tokenizeQuery(
-                    LuceneAnalyzerConstants.standardAnalyzerString(), predicate.getKeyword());
-            String asterixKeyword = 
-                    "[" +
-                    keywordList.stream().map(keyword -> "\"" + keyword + "\"")
-                        .collect(Collectors.joining(", ")) +  
-                    "]";
             String asterixField = "`" + predicate.getField() + "`";
             sb.append("and similarity_jaccard(word_tokens(" + asDataset + "." + asterixField + "), ");
-            sb.append("word_tokens('" + asterixKeyword + "')) > 0.0").append("\n");
+            sb.append("word_tokens('" + predicate.getKeyword() + "')) > 0.0").append("\n");
         }
         if(predicate.getStartDate() != null){
         	String startDate = predicate.getStartDate();
