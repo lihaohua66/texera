@@ -43,11 +43,13 @@ public class TableSink implements ISink {
         String tableName = predicate.getTableName();
         RelationManager relationManager = RelationManager.getRelationManager();
         if (relationManager.checkTableExistence(tableName)) {
-            relationManager.deleteTable(tableName);
+//            relationManager.deleteTable(tableName);
+        } else {
+            relationManager.createTable(
+                    tableName, Paths.get(Utils.getTextdbHomePath(), "index", tableName).toString(), 
+                    tableSchema, predicate.getLuceneAnalyzerStr());
         }
-        relationManager.createTable(
-                tableName, Paths.get(Utils.getTextdbHomePath(), "index", tableName).toString(), 
-                tableSchema, predicate.getLuceneAnalyzerStr());
+
     }
 
     @Override
