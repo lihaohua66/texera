@@ -72,6 +72,7 @@ public class TableSink implements ISink {
                         new TermQuery(new Term(TwitterConverterConstants.TWEET_ID, tweetIDField.getValue())));
                 dataReader.open();
                 if (dataReader.getNextTuple() != null) {
+                    System.out.println("duplicate found, id is: " + tweetIDField.getValue());
                     continue;
                 }
                 dataReader.close();
