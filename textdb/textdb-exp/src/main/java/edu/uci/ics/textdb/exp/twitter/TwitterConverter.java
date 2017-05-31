@@ -88,6 +88,7 @@ public class TwitterConverter implements IOperator {
             String city = geoTagNode.get("cityName").asText();
             String createAt = tweet.get("create_at").asText();
             return Arrays.asList(
+                    new StringField(id.toString()),
                     new TextField(text),
                     new StringField(tweetLink),
                     new StringField(userLink),

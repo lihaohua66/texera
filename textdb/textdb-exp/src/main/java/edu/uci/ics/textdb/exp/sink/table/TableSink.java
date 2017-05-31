@@ -4,16 +4,22 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.TermQuery;
+
 import edu.uci.ics.textdb.api.constants.SchemaConstants;
 import edu.uci.ics.textdb.api.dataflow.IOperator;
 import edu.uci.ics.textdb.api.dataflow.ISink;
 import edu.uci.ics.textdb.api.exception.TextDBException;
 import edu.uci.ics.textdb.api.field.IField;
+import edu.uci.ics.textdb.api.field.StringField;
 import edu.uci.ics.textdb.api.schema.Attribute;
 import edu.uci.ics.textdb.api.schema.AttributeType;
 import edu.uci.ics.textdb.api.schema.Schema;
 import edu.uci.ics.textdb.api.tuple.Tuple;
 import edu.uci.ics.textdb.api.utils.Utils;
+import edu.uci.ics.textdb.exp.twitter.TwitterConverterConstants;
+import edu.uci.ics.textdb.storage.DataReader;
 import edu.uci.ics.textdb.storage.DataWriter;
 import edu.uci.ics.textdb.storage.RelationManager;
 
@@ -60,6 +66,16 @@ public class TableSink implements ISink {
         dataWriter.open();
         Tuple tuple;
         while ((tuple = inputOperator.getNextTuple()) != null) {
+            if (tuple.getSchema().containsField(TwitterConverterConstants.TWEET_ID)) {
+                StringField tweetIDField = tuple.getField(TwitterConverterConstants.TWEET_ID);
+                DataReader dataReader = relationManager.getTableDataReader(predicate.getTableName(), 
+                        new TermQuery(new Term(TwitterConverterConstants.TWEET_ID, tweetIDField.getValue())));
+                dataReader.open();
+                if (dataReader.getNextTuple() != null) {
+                    continue;
+                }
+                dataReader.close();
+            }
             dataWriter.insertTuple(processOneTuple(tuple));
         }
         dataWriter.close();
