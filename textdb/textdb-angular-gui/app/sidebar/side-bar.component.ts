@@ -89,8 +89,12 @@ export class SideBarComponent {
         this.selectedAttribute = "";
 
         // and load previously saved attributes and proper attributes for the selected table
-        this.selectedAttributesList = data.operatorData.properties.attributes.attributes;
-        this.getAttributesForTable(data.operatorData.properties.attributes.tableName);
+        if (data.operatorData.properties.attributes.attributes) {
+          this.selectedAttributesList = data.operatorData.properties.attributes.attributes;
+        }
+        if (data.operatorData.properties.attributes.tableName) {
+          this.getAttributesForTable(data.operatorData.properties.attributes.tableName);
+        }
       });
 
     currentDataService.checkPressed$.subscribe(
