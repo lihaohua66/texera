@@ -85,8 +85,10 @@ public class NewQueryPlanResource {
                 // execute the plan and return success message
                 Engine.getEngine().evaluate(plan);
                 ObjectNode objectNode = new ObjectMapper().createObjectNode();
-                objectNode.put("status", "plan sucessfully executed");
-                return new TextdbWebResponse(0, new ObjectMapper().writeValueAsString(objectNode));
+                objectNode.put("status", "query plan has been sucessfully executed");
+                ObjectNode resultJson = new ObjectMapper().createObjectNode();
+                resultJson.set("results", objectNode);
+                return new TextdbWebResponse(0, new ObjectMapper().writeValueAsString(resultJson));
             }
             
         } catch ( IOException | RuntimeException e) {
