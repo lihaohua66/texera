@@ -586,7 +586,7 @@ let writeTable = {
     },
     attributes : {
         "operatorType":"WriteTable",
-        "writeToTable":"table"
+        "table":"table"
     }
   }
 }
