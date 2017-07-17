@@ -1,4 +1,4 @@
-textdb_workspace = "/home/jamshid/workspace/"
+textdb_workspace = "/home/jamshid/textdb_workspace/"
 maven_repo_home = "/home/jamshid/.m2/repository/"
 java8_bin = "/usr/bin/java"
 
@@ -25,6 +25,7 @@ print "" + \
         maven_repo_home + "junit/junit/4.8.1/junit-4.8.1.jar" + ":" + \
         maven_repo_home + "org/apache/lucene/lucene-core/5.5.0/lucene-core-5.5.0.jar" + ":" + \
         maven_repo_home + "org/apache/lucene/lucene-analyzers-common/5.5.0/lucene-analyzers-common-5.5.0.jar" + ":" + \
+        maven_repo_home + "org/apache/lucene/lucene-analyzers-smartcn/5.5.0/lucene-analyzers-smartcn-5.5.0.jar" + ":" + \
         maven_repo_home + "org/apache/lucene/lucene-queryparser/5.5.0/lucene-queryparser-5.5.0.jar" + ":" + \
         maven_repo_home + "org/apache/lucene/lucene-queries/5.5.0/lucene-queries-5.5.0.jar" + ":" + \
         maven_repo_home + "org/apache/lucene/lucene-sandbox/5.5.0/lucene-sandbox-5.5.0.jar" + ":" + \
@@ -33,9 +34,9 @@ print "" + \
         textdb_workspace + "/textdb/textdb/textdb-common/target/classes" + ":" + \
         textdb_workspace + "/textdb/textdb/textdb-dataflow/target/classes" + ":" + \
         maven_repo_home + "com/google/re2j/re2j/1.1/re2j-1.1.jar" + ":" + \
-        maven_repo_home + "com/fasterxml/jackson/core/jackson-databind/2.5.3/jackson-databind-2.5.3.jar" + ":" + \
-        maven_repo_home + "com/fasterxml/jackson/core/jackson-core/2.5.3/jackson-core-2.5.3.jar" + ":" + \
-        maven_repo_home + "com/fasterxml/jackson/core/jackson-annotations/2.5.3/jackson-annotations-2.5.3.jar" + ":" + \
+        maven_repo_home + "com/fasterxml/jackson/core/jackson-databind/2.8.7/jackson-databind-2.8.7.jar" + ":" + \
+        maven_repo_home + "com/fasterxml/jackson/core/jackson-core/2.8.7/jackson-core-2.8.7.jar" + ":" + \
+        maven_repo_home + "com/fasterxml/jackson/core/jackson-annotations/2.8.7/jackson-annotations-2.8.7.jar" + ":" + \
         textdb_workspace + "/textdb/textdb/textdb-storage/target/classes" + ":" + \
         maven_repo_home + "edu/stanford/nlp/stanford-corenlp/3.6.0/stanford-corenlp-3.6.0.jar" + ":" + \
         maven_repo_home + "com/io7m/xom/xom/1.2.10/xom-1.2.10.jar" + ":" + \

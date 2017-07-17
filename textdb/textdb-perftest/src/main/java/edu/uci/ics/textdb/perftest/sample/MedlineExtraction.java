@@ -85,7 +85,7 @@ public class MedlineExtraction {
     public static void main(String[] args) throws Exception {
         // write the index of data files
         // index only needs to be written once, after the first run, this function can be commented out
-//       writeSampleIndex();
+       writeSampleIndex();
        System.out.println(number);
        extractDrugsDiseases();
         // perform the extraction task
@@ -174,13 +174,27 @@ public class MedlineExtraction {
 //        				KeywordMatchingType.SUBSTRING_SCANBASED, disease);
 //        DictionaryMatcher dictionaryMatcher1 = new DictionaryMatcher(dictionaryPredicate1);
 //        
-//        dictionaryMatcher1.setInputOperator(dictionaryMatcher);
+//        dictionaryMatcher1.setInputOperator(scanBasedSourceOperator);
+////        dictionaryMatcher1.setInputOperator(dictionaryMatcher);
 
-        RegexPredicate regexPredicate = 
-        		new RegexPredicate("(taking|injecting|injections?|usage|using|dose|dosage|prescriptions?|prescribing)( of)?( the)? "
-        				+ "<drug>"
-        				+ " (injection|tablets?|inhalation|vaccine|capsules?|inhibitors?|powder|gel|cream|oinment)", 
-        				attributeNames, "report");
+//        RegexPredicate regexPredicate = 
+//        		new RegexPredicate("(advanced|severe|intense|weak|silent|strong|developed|developing|bad) "
+//       				+ "<disease>"
+//        				+ " (syndrome|disorder)", 
+//        				attributeNames, "report");
+
+        RegexPredicate regexPredicate =
+                        new RegexPredicate("(powder|liquid|injection?|injecting|tablets?|usage|using|)( of)?( the)? "
+//                                        + " <drug>"
+                                        + ".*"
+                                        + " (can|could|will|would|should|is|was|are|were)?( )?(dicreases?|dicreasing|stops?|stopping|increases?|increasing|elevates?|elevating)",
+                                        attributeNames, "report");
+
+//        RegexPredicate regexPredicate = 
+//        		new RegexPredicate("(taking|injecting|injections?|usage|using|dose|dosage|prescriptions?|prescribing)( of)?( the)? "
+//        				+ "<drug>"
+//        				+ " (injection|tablets?|inhalation|vaccine|capsules?|inhibitors?|powder|gel|cream|oinment)", 
+//        				attributeNames, "report");
 //        RegexPredicate regexPredicate = 
 //        		new RegexPredicate("(taking|injecting|injections?|usage|using|dose|dosage|prescriptions?|prescribing)( of)?( the)? "
 //        				+ "<drug>"
@@ -196,8 +210,8 @@ public class MedlineExtraction {
         
         
         TupleSink tupleSink = new TupleSink();
-//        tupleSink.setInputOperator(regexMatcher);
-        tupleSink.setInputOperator(dictionaryMatcher);
+        tupleSink.setInputOperator(regexMatcher);
+//        tupleSink.setInputOperator(dictionaryMatcher);
         
         long startMatchTime = System.currentTimeMillis();
         tupleSink.open();

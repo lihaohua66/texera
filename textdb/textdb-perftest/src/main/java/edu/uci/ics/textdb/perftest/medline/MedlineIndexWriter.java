@@ -60,14 +60,18 @@ public class MedlineIndexWriter {
     public static final Schema SCHEMA_MEDLINE = new Schema(ATTRIBUTES_MEDLINE);
 
     public static Tuple recordToTuple(String record) throws IOException, ParseException {
-        JsonNode jsonNode = new ObjectMapper().readValue(record, JsonNode.class);
-        ArrayList<IField> fieldList = new ArrayList<IField>();
-        for (Attribute attr : ATTRIBUTES_MEDLINE) {
-            fieldList.add(StorageUtils.getField(attr.getAttributeType(), jsonNode.get(attr.getAttributeName()).toString()));
+        try{
+        	JsonNode jsonNode = new ObjectMapper().readValue(record, JsonNode.class);
+	        ArrayList<IField> fieldList = new ArrayList<IField>();
+	        for (Attribute attr : ATTRIBUTES_MEDLINE) {
+	            fieldList.add(StorageUtils.getField(attr.getAttributeType(), jsonNode.get(attr.getAttributeName()).toString()));
+	        }
+	        IField[] fieldArray = new IField[fieldList.size()];
+	        Tuple tuple = new Tuple(SCHEMA_MEDLINE, fieldList.toArray(fieldArray));
+	        return tuple;
+        }catch(Exception e){
+        	return null;
         }
-        IField[] fieldArray = new IField[fieldList.size()];
-        Tuple tuple = new Tuple(SCHEMA_MEDLINE, fieldList.toArray(fieldArray));
-        return tuple;
     }
     
     public static void writeMedlineIndex(Path medlineFilepath, String tableName) throws IOException, StorageException, ParseException {

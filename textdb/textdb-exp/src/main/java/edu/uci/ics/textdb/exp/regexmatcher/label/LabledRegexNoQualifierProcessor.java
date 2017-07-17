@@ -335,7 +335,7 @@ public class LabledRegexNoQualifierProcessor {
      * @return
      */
     private boolean generateAffixMap(String attribute, Tuple tuple, int tupleNumber, Map<String, List<Span> > affixSpans){
-
+/*
     	if(tupleNumber <= TOTAL_USED_FOR_STATS){
     		boolean isValid = true;
     		for (ScoredString affix : scoredAffixList) {
@@ -355,7 +355,7 @@ public class LabledRegexNoQualifierProcessor {
     		}
     		
     		return isValid;
-    	}else{
+    	}else{*/
     		for (ScoredString affix : scoredAffixList) {
     			List<Span> matchingResults = generateAffixSpanList(tuple.getField(attribute).getValue().toString(), 
                 		attribute, affix.value);
@@ -365,7 +365,7 @@ public class LabledRegexNoQualifierProcessor {
                 affixSpans.put(affix.value, matchingResults);
     		}
     		return true;
-    	}
+//   	}
     }
     
     private List<Span> generateAffixSpanList(String fieldValue, String attributeName, String affixValue){
