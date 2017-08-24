@@ -26,12 +26,12 @@ export class SideBarComponent {
 
   hiddenList: string[] = ["operatorType", "luceneAnalyzer", "matchingType"];
 
-  selectorList: string[] = ["dictionaryEntries", "password", "matchingType", 
-    "nlpEntityType", "splitType", "splitOption", "sampleType", "comparisonType", 
+  selectorList: string[] = ["dictionaryEntries", "password", "matchingType",
+    "nlpEntityType", "splitType", "splitOption", "sampleType", "comparisonType",
     "aggregationType", "attributes", "tableName", "attribute","script"].concat(this.hiddenList);
 
   matcherList: string[] = ["conjunction", "phrase", "substring"];
-  nlpEntityList: string[] = ["noun", "verb", "adjective", "adverb", "ne_all", 
+  nlpEntityList: string[] = ["noun", "verb", "adjective", "adverb", "ne_all",
     "number", "location", "person", "organization", "money", "percent", "date", "time"];
   regexSplitList: string[] = ["left", "right", "standalone"];
   nlpSplitList: string[] = ["oneToOne", "oneToMany"];
@@ -160,6 +160,7 @@ export class SideBarComponent {
   }
 
   onFormChange (attribute: string) {
+    console.log(this.data);
     jQuery("#the-flowchart").flowchart("setOperatorData", this.operatorId, this.data);
   }
 
