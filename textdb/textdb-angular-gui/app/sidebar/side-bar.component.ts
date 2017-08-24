@@ -28,7 +28,7 @@ export class SideBarComponent {
 
   selectorList: string[] = ["dictionaryEntries", "password", "matchingType", 
     "nlpEntityType", "splitType", "splitOption", "sampleType", "comparisonType", 
-    "aggregationType", "attributes", "tableName", "attribute"].concat(this.hiddenList);
+    "aggregationType", "attributes", "tableName", "attribute","script"].concat(this.hiddenList);
 
   matcherList: string[] = ["conjunction", "phrase", "substring"];
   nlpEntityList: string[] = ["noun", "verb", "adjective", "adverb", "ne_all", 

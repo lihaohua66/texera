@@ -286,19 +286,32 @@ public class DataflowUtils {
             }
 
             if (attributeType == AttributeType.TEXT) {
-                
+                ///////////////////////////////////
+                // to replace substring with regex
+                Pattern pattern = Pattern.compile(queryKeyword,Pattern.CASE_INSENSITIVE);
                 String fieldValueLowerCase = fieldValue.toLowerCase();
-                String queryKeywordLowerCase = queryKeyword.toLowerCase();
-                for(int i = 0 ; i < fieldValueLowerCase.length(); i++){
-                	int index = -1;
-                	if((index = fieldValueLowerCase.indexOf(queryKeywordLowerCase,i)) != -1){
-                		matchingResults.add(new Span(attributeName, index, index + queryKeyword.length(), queryKeyword, 
-                				fieldValue.substring(index, index + queryKeyword.length())));
-                		i = index + 1;
-                	}else{
-                		break;
-                	}
+                Matcher javaMatcher = pattern.matcher(fieldValueLowerCase);
+                while (javaMatcher.find()) {
+                    int start = javaMatcher.start();
+                    int end = javaMatcher.end();
+                    matchingResults.add(
+                            new Span(attributeName, start, end, queryKeyword, fieldValue.substring(start, end)));
                 }
+                ///
+                /////////////////////////////////////
+                
+  //              String queryKeywordLowerCase = queryKeyword.toLowerCase();
+                 //  Pattern p = 
+//                for(int i = 0 ; i < fieldValueLowerCase.length(); i++){
+//                	int index = -1;
+//                	if((index = fieldValueLowerCase.indexOf(queryKeywordLowerCase,i)) != -1){
+//                		matchingResults.add(new Span(attributeName, index, index + queryKeyword.length(), queryKeyword, 
+//                				fieldValue.substring(index, index + queryKeyword.length())));
+//                		i = index + 1;
+//                	}else{
+//                		break;
+//                	}
+//                }
 
             }
         }

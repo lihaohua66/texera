@@ -3,6 +3,8 @@ package edu.uci.ics.textdb.exp.common;
 import java.util.UUID;
 
 import edu.uci.ics.textdb.exp.twitterfeed.TwitterFeedSourcePredicate;
+import edu.uci.ics.textdb.exp.udf.UdfPredicate;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -91,6 +93,8 @@ import edu.uci.ics.textdb.exp.wordcount.WordCountOperatorPredicate;
         
         @Type(value = WordCountIndexSourcePredicate.class, name = "WordCountIndexSource"),
         @Type(value = WordCountOperatorPredicate.class, name = "WordCount"),
+        
+        @Type(value = UdfPredicate.class, name = "Udf"),
         
 })
 public abstract class PredicateBase implements IPredicate {

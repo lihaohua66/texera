@@ -70,8 +70,8 @@ let dictionaryMatcher = {
         "operatorType": "DictionaryMatcher",
         "attributes": [],
         "dictionaryEntries": [],
-        "luceneAnalyzer": "standard",
-        "matchingType": "phrase",
+        "luceneAnalyzer": "smartchinese",
+        "matchingType": "substring",
         "spanListName": " "
     }
   }
@@ -639,8 +639,32 @@ let mysqlSink = {
         "database": "testDB",
         "table": "testTable",
         "username": "test",
-        "password": "test"
+        "password": "test",
     }
+  }
+}
+
+let udf = {
+  top : 20,
+  left : 20,
+  properties : {
+    title : 'UDF',
+    inputs : {
+      input_1 : {
+        label : "Input (:i)",
+      }
+    },
+    outputs : {
+      output_1 : {
+        label : "Output (:i)",
+      }
+    },
+    attributes : {
+        "operatorType": "Udf",
+        "attribute": "attr1",
+        "resultAttribute": "resultAttr",
+	    "script": "",
+	}
   }
 }
 
@@ -671,4 +695,5 @@ export const DEFAULT_MATCHERS: Data[] = [
     {id: 24, jsonData: fileSource},
     {id: 25, jsonData: mysqlSink},
     {id: 26, jsonData: nltkSentiment},
+    {id: 27, jsonData: udf},
 ];

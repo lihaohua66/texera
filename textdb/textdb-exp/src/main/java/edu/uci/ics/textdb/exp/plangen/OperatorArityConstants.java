@@ -30,6 +30,7 @@ import edu.uci.ics.textdb.exp.sink.tuple.TupleSinkPredicate;
 import edu.uci.ics.textdb.exp.source.file.FileSourcePredicate;
 import edu.uci.ics.textdb.exp.source.scan.ScanSourcePredicate;
 import edu.uci.ics.textdb.exp.twitterfeed.TwitterFeedSourcePredicate;
+import edu.uci.ics.textdb.exp.udf.UdfPredicate;
 import edu.uci.ics.textdb.exp.wordcount.WordCountIndexSourcePredicate;
 import edu.uci.ics.textdb.exp.wordcount.WordCountOperatorPredicate;
 
@@ -75,6 +76,8 @@ public class OperatorArityConstants {
         fixedInputArityMap.put(ExcelSinkPredicate.class, 1);
         fixedInputArityMap.put(MysqlSinkPredicate.class, 1);
         
+        fixedInputArityMap.put(UdfPredicate.class, 1);
+        
     }
     
     public static Map<Class<? extends PredicateBase>, Integer> fixedOutputArityMap = new HashMap<>();
@@ -110,6 +113,8 @@ public class OperatorArityConstants {
         fixedOutputArityMap.put(TupleSinkPredicate.class, 0);
         fixedOutputArityMap.put(ExcelSinkPredicate.class, 0);
         fixedOutputArityMap.put(MysqlSinkPredicate.class, 0);
+        
+        fixedOutputArityMap.put(UdfPredicate.class, 1);
         
     }
     
