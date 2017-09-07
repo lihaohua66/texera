@@ -262,7 +262,9 @@ let asterixSource = {
         "dataverse": "twitter",
         "dataset": "ds_tweet",
         "queryField": "text",
-        "keyword": "drug",
+        "keyword": "hurricane",
+	"startDate": "2017-09-01",
+	"endDate": "2017-09-02",
         "limit": 100000,
     }
   }
