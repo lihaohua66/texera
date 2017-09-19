@@ -115,14 +115,14 @@ public class SampleExtraction {
      *                    
      */
     public static void udfDo() throws Exception {
-        String tempFile1Path = "/tmp/adidas.txt";
+        String tempFile1Path = "/tmp/abc.txt";
 //        String legalExtractionResultFile = "/tmp/legalExtractionResult.csv";
         
         FileSourcePredicate predicate = new FileSourcePredicate(
                 tempFile1Path.toString(),"text");
         FileSourceOperator fileSource = new FileSourceOperator(predicate);
         
-        UdfOperator udfOp = new UdfOperator(new UdfPredicate("text","result","    output = len(input)"));
+        UdfOperator udfOp = new UdfOperator(new UdfPredicate("text","result","output = len(input)\noutput=output*10"));
         
         udfOp.setInputOperator(fileSource);
         
@@ -134,7 +134,7 @@ public class SampleExtraction {
         sink.close();
         
         for (Tuple tup:result) {
-            System.out.print(tup.getField(1).getValue());
+            System.out.print(tup.getField(2).getValue());
         }
     }
     public static void extractPersonLocation() throws Exception {

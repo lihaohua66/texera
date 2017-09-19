@@ -663,7 +663,7 @@ let udf = {
         "operatorType": "Udf",
         "attribute": "attr1",
         "resultAttribute": "resultAttr",
-	    "script": "",
+	    "script": "def UDF(key, input):\n    #Must return output\n    #key:tupleID\n    #input is text to be processed\n    #############\n    # TODO\n\n    #example output\n    output = input\n    return output",
 	}
   }
 }
