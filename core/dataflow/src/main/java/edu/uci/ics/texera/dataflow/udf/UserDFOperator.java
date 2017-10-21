@@ -46,6 +46,8 @@ public class UserDFOperator implements IOperator, SignalHandler {
     String SIG_WAIT = "w";
     String SIG_LEN;
     
+    int OSSIG = 12;
+    
     // varible for tst
     private String inputFilePath = "/tmp/input.txt";
     private String outputFilePath = "/tmp/output.txt";
@@ -91,7 +93,6 @@ public class UserDFOperator implements IOperator, SignalHandler {
         }
         inputOperator.open();
         Schema inputSchema = inputOperator.getOutputSchema();
-//        UserDFOperator userDFOperator = new UserDFOperator(predicate);
         Signal.handle(new Signal("USR2"), this);
         handshake();
         /*
@@ -143,11 +144,9 @@ public class UserDFOperator implements IOperator, SignalHandler {
             
             // Get direct byte buffer access using channel.map() operation,    320*K bytes
             inputBuffer = inputFileChannel.map(FileChannel.MapMode.READ_WRITE, 0, 1024* 8);
-    
-            javaPID = getJavaPID()+"\n";
-    //        System.out.println("Java PID:" + javaPID);
+            
             inputBuffer.position(0);
-            inputBuffer.put(javaPID.getBytes());
+            inputBuffer.put((getJavaPID()+"\n").getBytes());
             
             //build output Buffer mmap
             File outputFile = new File(outputFilePath);
@@ -164,7 +163,7 @@ public class UserDFOperator implements IOperator, SignalHandler {
                     break;
                 }
             }
-            pythonPID = readStringFromMMap(outputBuffer, 0);
+            pythonPID = getPythonPID();
             
             if (pythonPID == null || pythonPID.length() == 0) {
                 return false;
@@ -179,9 +178,13 @@ public class UserDFOperator implements IOperator, SignalHandler {
     
     /* Return SIG-WAIT, SIG_NULL or SIG_LEN
      * */
-    public String getSignal(MappedByteBuffer Buffer) {
+    public String getPythonPID() {
+        return readStringFromMMap(outputBuffer, PID_POSITION);
+    }
+    
+    public String getSignal() {
         String strSig = "";
-        Buffer.position(SIG_POSITION);
+        outputBuffer.position(SIG_POSITION);
         while (true)
         {
             char ch;
@@ -201,7 +204,7 @@ public class UserDFOperator implements IOperator, SignalHandler {
     }
     
     public void putSignal(String signal) {
-        inputBuffer.position(10);
+        inputBuffer.position(SIG_POSITION);
         inputBuffer.put((signal+ "\n").getBytes());
         inputBuffer.putChar((char) Character.UNASSIGNED);
     }
@@ -212,6 +215,9 @@ public class UserDFOperator implements IOperator, SignalHandler {
         inputBuffer.putChar((char) Character.UNASSIGNED);
     }
     
+    public String getJsonFromOutputBuffer() {
+        return readStringFromMMap(outputBuffer, JSON_POSTION);
+    }
  // read a piece of buffer ended with unsigend character
     public String readStringFromMMap(MappedByteBuffer outputBuffer, int startPos) {
         String str = "";
@@ -225,10 +231,8 @@ public class UserDFOperator implements IOperator, SignalHandler {
             str += ch;
         }
         if (str.trim().length() == 0) {
-            System.out.println("get Nothing from reading");
             return null;
         }
-        System.out.println("read " +str);
         return str.trim();
     }
     
@@ -284,14 +288,14 @@ public class UserDFOperator implements IOperator, SignalHandler {
             }
             //Output from buffer
             
-            String strLenSig = getSignal(outputBuffer);
+            String strLenSig = getSignal();
             
             if(strLenSig == SIG_NULL) {
                 processPython.destroy();
                 return null;
             }
             
-            String outputTupleJsonStr = readStringFromMMap(outputBuffer, 20);
+            String outputTupleJsonStr = getJsonFromOutputBuffer();
             
             outputTuple = new ObjectMapper().readValue(outputTupleJsonStr.trim(), Tuple.class);
             outputSchema = outputTuple.getSchema();
@@ -325,7 +329,7 @@ public class UserDFOperator implements IOperator, SignalHandler {
     @Override
     public void handle(Signal arg0) {
         // TODO Auto-generated method stub
-        if (arg0.getNumber() == 12) {
+        if (arg0.getNumber() == OSSIG) {
             getPythonResult = true;
         }
     }
