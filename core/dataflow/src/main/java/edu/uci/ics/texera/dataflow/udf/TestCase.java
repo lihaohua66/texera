@@ -46,7 +46,6 @@ public class TestCase {
         
         UserDFOperator userDFOperator = new UserDFOperator(new UserDFOperatorPredicate());
         userDFOperator.setInputOperator(inputOperator);
-//        tupleSink.setInputOperator(userDFOperator);
         
         userDFOperator.open();
         Tuple tuple = null;
