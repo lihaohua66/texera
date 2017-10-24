@@ -44,11 +44,8 @@ class TupleOperator:
         self.map_output = mmap.mmap(self.f_output.fileno(), 0)
         self.map_output.seek(0)
         self.map_output.write(bytes(str(self.pythonpid)+"\n", 'utf-8'))
-        print("Hands shake begin")
         os.kill(self.javapid, signal.SIGUSR2)
-        print("success: Hands shake end")
 
-        
     def string_2_dict(self, string):
         self.tuple_dict = json.loads(json.dumps(str(string)))
         
@@ -61,9 +58,7 @@ class TupleOperator:
         (self.output_tuple_dict['fields']).append(field)
         
     def get_valueByAttribute(self, attrname):
-        print("get value By Attr")
-        print(attrname)
-        print(self.tuple_dict['schema'])
+        #print(self.tuple_dict['schema'])
         for att,v in zip(self.tuple_dict['schema']['attributes'], self.tuple_dict['fields']):
             for attname,vv in att.items():
                 if (vv == attrname):
@@ -75,11 +70,7 @@ class TupleOperator:
         global sig_output
         self.map_input.seek(10)
         sig_input = self.map_input.readline().rstrip()
-#        bool_output = False
-        print(sig_input)
-        if(sig_input == b'0'):
-            print("Should output 000000000000000000000000000000000")
-        else:
+        if(sig_input != b'0'):
             textlen_input = sig_input
             self.map_input.seek(20)
             content_input = self.map_input.read(int(textlen_input))
@@ -111,17 +102,13 @@ class TupleOperator:
             #do nothing, just let sig_output be undifined.
         self.tuple_dict = {}
         os.kill(self.javapid, signal.SIGUSR2)
-
-    def do_sig(self):
-        self.read_input()
-        ##############################################################
-        ###user defined function here
         
+    def user_defined_function(self):
         global n2one
         global sig_output
         global my_length
 
-        n2one = False
+        n2one = True
         if (n2one == True):
             #This demo will compute total length of field content for all tuple 
             if (sig_input == b'0' and sig_output == 't'):
@@ -140,12 +127,8 @@ class TupleOperator:
                 #do caculation
                 attrName = "content"
                 attrType = "text"
-                
-                for att,v in zip(self.tuple_dict['schema']['attributes'], self.tuple_dict['fields']):
-                    for attname,vv in att.items():
-                        if (vv == attrName):
-                            input_fieldValue = v['value']
-                value = len(input_fieldValue)
+                            
+                value = len(self.get_valueByAttribute(attrName))
                 self.output_tuple_dict = self.tuple_dict
                 
                 my_length = my_length + value
@@ -153,53 +136,30 @@ class TupleOperator:
         if(n2one == False):
             #we need to construct a output dict
             #this demo will compute length of field "content"
-            input_fieldValue = ''
             if (sig_output == 'w'):
                 sig_output = 't'
             if (sig_input == 't'):
+                sig_output = 't'
                 #send signal to write tuple
                 self.output_tuple_dict = self.tuple_dict
                 attrName = "content"
                 attrType = "text"
-                for att,v in zip(self.tuple_dict['schema']['attributes'], self.tuple_dict['fields']):
-                    for attname,vv in att.items():
-                        if (vv == attrName):
-                            input_fieldValue = v['value']
-                value = len(input_fieldValue)
+                value = len(self.get_valueByAttribute(attrName))
                 new_attrName = "local_length"
                 self.add_field(new_attrName, attrType, value)
-                sig_output = 't'
+                
             if (sig_input == b'0'):
                 #send signal of null
                 sig_output = '0'
+
+    def do_sig(self):
+        self.read_input()
+        ##############################################################
+        ###user defined function here
+        self.user_defined_function()
     ####################################################
     ## output Part
         self.write_output()
-        
-    def get_nextTupleText(self):
-        self.map_input.seek(10)
-        text_len = self.map_input.readline().rstrip()
-        if (text_len == 0):
-            return None
-        self.map_input.seek(20)
-        content_input = self.map_input.read(int(text_len))
-        self.tuple_dict = json.loads(content_input.decode('utf-8'))
-        return text_len
-        #this is User defined function
-        
-    def populate_output(self):
-        #this is a example User defined function to state the lenght of a field.
-        # if length >10, ouput.
-#        self.tuple_dict = json.loads(content_input.decode('utf-8'))
-        input_fieldValue = self.getvalueByAttribute('content')
-        attrName = "length"
-        attrType = "text"
-        value = len(input_fieldValue)
-        
-        #we need to construct a output dict
-        self.output_tuple_dict = self.tuple_dict
-        self.add_field(attrName, attrType, value)
-        return value>0
     
     def get_fieldvalue(self, field):
         value = self.tuple_dict['schema']['attributes']
