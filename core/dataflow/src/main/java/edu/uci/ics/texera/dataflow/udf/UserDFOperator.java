@@ -37,28 +37,27 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     private Schema outputSchema;
     
     /* 2 input signal:
-     *      SIG_NULL= "": result NULL
-     *      SIG_LEN = length of text
+     *      TAG_NULL= "": result NULL
+     *      TAG_LEN = length of text
      * 3 ouput signal:
-     *      SIG_NULL= "": result NULL
-     *      SIG_WAIT= Character.unsigned:   need to wait for next
-     *      SIG_LEN = length of text
+     *      TAG_NULL= "": result NULL
+     *      TAG_WAIT= Character.unsigned:   need to wait for next
+     *      TAG_LEN = length of text
      */
     // Signal write to buffer
     int POSITION_PID = 0;
-    int POSITION_SIG = 10;
+    int POSITION_TAG = 10;
     int POSITION_JSON = 20;
     
-    String SIG_NULL = "0\n";
-    String SIG_WAIT = "w";
-    String SIG_LEN;
+    String TAG_NULL = "0\n";
+    String TAG_WAIT = "w";
+    String TAG_LEN;
     
     //Signal used between processes
     int IPC_SIG = 12;
+    String IPC_SIG_STRING = "USR2";
     
     // Named buffer in file system
-//    private String inputFilePath = "/tmp/input.txt";
-//    private String outputFilePath = "/tmp/output.txt";
     
     private String inputFilePath = Utils.getResourcePath("input_java_python.txt", TexeraProject.TEXERA_DATAFLOW).toString();
     private String outputFilePath = Utils.getResourcePath("output_java_python.txt", TexeraProject.TEXERA_DATAFLOW).toString();
@@ -70,7 +69,6 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     private boolean getPythonResult = false;
     public Process processPython;
     private String pythonPID;
-    public boolean resultSig = true;
     
     public Tuple outputTuple;
     
@@ -137,42 +135,42 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     }
     
     
-    /* Return SIG-WAIT, SIG_NULL or SIG_LEN
+    /* Return TAG-WAIT, TAG_NULL or TAG_LEN
      * */
     public String getPythonPID() {
         return readStringFromMMap(outputBuffer, POSITION_PID);
     }
     
-    public String getSignal() {
-        String strSig = "";
-        outputBuffer.position(POSITION_SIG);
+    public String getTagFromOutputBuffer() {
+        String strTag = "";
+        outputBuffer.position(POSITION_TAG);
         while (true)
         {
             char ch;
             if ((ch = (char) outputBuffer.get()) == Character.UNASSIGNED) {
                 break;
             } else if (ch == 'w') {
-                strSig = SIG_WAIT;
+                strTag = TAG_WAIT;
                 break;
             }
-            strSig += ch;
+            strTag += ch;
         }
-        if(strSig.startsWith("0")) {
-            strSig =  SIG_NULL;
+        if(strTag.startsWith("0")) {
+            strTag =  TAG_NULL;
         }
-        //return the Tuple Json length
-        return strSig;
+        //return the Tuple Json string length
+        return strTag;
     }
     
-    public void putSignalIntoInputBuffer(String signal) {
-        inputBuffer.position(POSITION_SIG);
-        inputBuffer.put((signal+ "\n").getBytes());
+    public void putTagIntoInputBuffer(String tag) {
+        inputBuffer.position(POSITION_TAG);
+        inputBuffer.put((tag + "\n").getBytes());
         inputBuffer.putChar((char) Character.UNASSIGNED);
     }
     
-    public void putStringIntoInputBuffer(String string) {
+    public void putJsonIntoInputBuffer(String stringJson) {
         inputBuffer.position(POSITION_JSON);
-        inputBuffer.put((string).getBytes());
+        inputBuffer.put((stringJson).getBytes());
         inputBuffer.putChar((char) Character.UNASSIGNED);
     }
     
@@ -209,7 +207,7 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
         return 1;
     }
     
-    public static void singleExec(String pythonPID) throws IOException {
+    public static void notifyPython(String pythonPID) throws IOException {
         Runtime.getRuntime().exec("kill -SIGUSR2 " + pythonPID);
     }
     public void setInputOperator(IOperator operator) {
@@ -252,7 +250,7 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     protected void setUp() throws TexeraException {
         // TODO Auto-generated method stub
         Schema inputSchema = inputOperator.getOutputSchema();
-        Signal.handle(new Signal("USR2"), this);
+        Signal.handle(new Signal(IPC_SIG_STRING), this);
         handShake();
         
         outputSchema = inputSchema;
@@ -266,16 +264,17 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
             Tuple inputTuple = inputOperator.getNextTuple();
             //write attribute content to input file
             //    0          10               .20
-            //    | JavaPID  |length or signal | Tuple Json  text
+            //    | JavaPID  |Tag: length or Tags | Tuple Json  string
             if (inputTuple == null) {
-                putSignalIntoInputBuffer(SIG_NULL);
+                putTagIntoInputBuffer(TAG_NULL);
             } else {
                 String inputTupleText = new ObjectMapper().writeValueAsString(inputTuple);
-                putSignalIntoInputBuffer(String.valueOf((new ObjectMapper().writeValueAsString(inputTuple)).length()));
-                putStringIntoInputBuffer(inputTupleText);
+                putTagIntoInputBuffer(String.valueOf((new ObjectMapper().writeValueAsString(inputTuple)).length()));
+                putJsonIntoInputBuffer(inputTupleText);
             }
-            // notify python data is ready
-            Runtime.getRuntime().exec("kill -SIGUSR2 "+ pythonPID.trim());
+            // notify python that data is ready
+//            Runtime.getRuntime().exec("kill -SIG" + IPC_SIG_STRING+" " + pythonPID.trim());
+            notifyPython( pythonPID.trim() );
             
             for( ; ; ) {
                 Thread.sleep(200);
@@ -286,13 +285,13 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
             }
             //Output from buffer
             
-            String strLenSig = getSignal();
+            String strLenTag = getTagFromOutputBuffer();
             
-            if (strLenSig == SIG_WAIT) {
+            if (strLenTag == TAG_WAIT) {
                 this.getNextTuple();
             }
             
-            if(strLenSig == SIG_NULL) {
+            if(strLenTag == TAG_NULL) {
                 processPython.destroy();
                 return null;
             }
