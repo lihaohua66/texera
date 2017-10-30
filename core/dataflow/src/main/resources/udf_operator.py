@@ -24,9 +24,9 @@ inputFullPathFileName = sys.argv[1]
 outputFullPathFileName = sys.argv[2]
 my_length = 0
 n2one = True
-sig_wait = True # initiate state for N:1
-sig_output = 'w'
-sig_input = ''
+tag_wait = True # initiate state for N:1
+tag_output = 'w'
+tag_input = ''
 
 class TupleOperator:
     def __init__(self):
@@ -66,64 +66,64 @@ class TupleOperator:
         return None
     
     def read_input(self):
-        global sig_input
-        global sig_output
+        global tag_input
+        global tag_output
         self.map_input.seek(10)
-        sig_input = self.map_input.readline().rstrip()
-        if(sig_input != b'0'):
-            textlen_input = sig_input
+        tag_input = self.map_input.readline().rstrip()
+        if(tag_input != b'0'):
+            textlen_input = tag_input
             self.map_input.seek(20)
             content_input = self.map_input.read(int(textlen_input))
             self.tuple_dict = json.loads(content_input.decode('utf-8'))
-            sig_input = 't'
+            tag_input = 't'
         
     def write_output(self):
-        global sig_input
-        global sig_output
-        if (sig_output == 't'):
+        global tag_input
+        global tag_output
+        if (tag_output == 't'):
 #            self.output_tuple_dict = self.tuple_dict
             content_output = json.dumps(self.output_tuple_dict)
-            sig_output = str(len(content_output))
+            tag_output = str(len(content_output))
             self.map_output.seek(10)
             textlen_output = len(content_output)
             self.map_output.write(bytes(str(textlen_output),'utf-8'))
             self.map_output.seek(20)
             self.map_output.write(content_output.encode('utf-8'))
-            sig_output = 't'
+            tag_output = 't'
 
-        if (sig_output == '0'):
+        if (tag_output == '0'):
             self.map_output.seek(10)
             self.map_output.write('0'.encode('utf-8'))
             
-        if (sig_output == 'w'):
+        if (tag_output == 'w'):
             self.map_output.seek(10)
             self.map_output.write('w'.encode('utf-8'))
         #if (sig_ouput == '#'):
-            #do nothing, just let sig_output be undifined.
+            #do nothing, just let tag_output be undifined.
         self.tuple_dict = {}
         os.kill(self.javapid, signal.SIGUSR2)
         
     def user_defined_function(self):
         global n2one
-        global sig_output
+        global tag_output
         global my_length
 
         n2one = True
         if (n2one == True):
             #This demo will compute total length of field content for all tuple 
-            if (sig_input == b'0' and sig_output == 't'):
+            if (tag_input == b'0' and tag_output == 't'):
                 #send end signal null
-                sig_output = '0'
-            if (sig_input == b'0' and sig_output == 'w'):
+                tag_output = '0'
+            if (tag_input == b'0' and tag_output == 'w'):
                 #send signal to write tuple
-                sig_output = 't'
+                tag_output = 't'
                 attrType =  "text"
                 value = my_length
                 new_attrName = "length"
                 self.add_field(new_attrName, attrType, value)
-            if (sig_input == 't' and sig_output == 'w'):
+            if (tag_input == 't' and tag_output == 'w'):
                 #send signal to wait
-                sig_output = 'w'
+                tag_output = 'w'
                 #do caculation
                 attrName = "content"
                 attrType = "text"
@@ -136,10 +136,10 @@ class TupleOperator:
         if(n2one == False):
             #we need to construct a output dict
             #this demo will compute length of field "content"
-            if (sig_output == 'w'):
-                sig_output = 't'
-            if (sig_input == 't'):
-                sig_output = 't'
+            if (tag_output == 'w'):
+                tag_output = 't'
+            if (tag_input == 't'):
+                tag_output = 't'
                 #send signal to write tuple
                 self.output_tuple_dict = self.tuple_dict
                 attrName = "content"
@@ -148,9 +148,9 @@ class TupleOperator:
                 new_attrName = "local_length"
                 self.add_field(new_attrName, attrType, value)
                 
-            if (sig_input == b'0'):
+            if (tag_input == b'0'):
                 #send signal of null
-                sig_output = '0'
+                tag_output = '0'
 
     def do_sig(self):
         self.read_input()
