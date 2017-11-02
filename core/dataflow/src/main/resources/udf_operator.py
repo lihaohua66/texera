@@ -104,10 +104,35 @@ class TupleOperator:
         os.kill(self.javapid, signal.SIGUSR2)
         
     def user_defined_function(self):
+        #User should implement this function
+        pass
+
+    def do_sig(self):
+        self.read_input()
+        ##############################################################
+        ###user defined function here
+        self.user_defined_function()
+        ####################################################
+        ## output Part
+        self.write_output()
+    
+    def get_fieldvalue(self, field):
+        value = self.tuple_dict['schema']['attributes']
+        return value
+
+    def onsignal_usr2(self, a,b):
+        self.do_sig()
+        
+    def close(self):
+        self.map.close()
+        self.map_output.close()
+
+#This is a demo User define function, user need to implement it.
+class UserTupeOpertor(TupleOperator):
+    def user_defined_function(self):
         global n2one
         global tag_output
         global my_length
-
         n2one = True
         if (n2one == True):
             #This demo will compute total length of field content for all tuple 
@@ -152,31 +177,13 @@ class TupleOperator:
                 #send signal of null
                 tag_output = '0'
 
-    def do_sig(self):
-        self.read_input()
-        ##############################################################
-        ###user defined function here
-        self.user_defined_function()
-    ####################################################
-    ## output Part
-        self.write_output()
-    
-    def get_fieldvalue(self, field):
-        value = self.tuple_dict['schema']['attributes']
-        return value
-
-    def onsignal_usr2(self, a,b):
-        self.do_sig()
-        
-    def close(self):
-        self.map.close()
-        self.map_output.close()
-
-
 def main():
-    tuple_operator = TupleOperator()
-#    tuple_operator.do_sig()     #        signal.signal(signal.SIGUSR2, do_sig(self))
-    signal.signal(signal.SIGUSR2, tuple_operator.onsignal_usr2)
+#    tuple_operator = TupleOperator()
+#    signal.signal(signal.SIGUSR2, tuple_operator.onsignal_usr2)
+    
+    userTupeOpertor = UserTupeOpertor()
+    signal.signal(signal.SIGUSR2, userTupeOpertor.onsignal_usr2)
+
     print("Python loop start")
     while 1:
         sleep(1)

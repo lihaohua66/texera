@@ -278,5 +278,4 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     @Override
     protected void cleanUp() throws TexeraException {        
     }
-    
 }
