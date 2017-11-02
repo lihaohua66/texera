@@ -98,8 +98,7 @@ class TupleOperator:
         if (tag_output == 'w'):
             self.map_output.seek(10)
             self.map_output.write('w'.encode('utf-8'))
-        #if (sig_ouput == '#'):
-            #do nothing, just let tag_output be undifined.
+
         self.tuple_dict = {}
         os.kill(self.javapid, signal.SIGUSR2)
         
@@ -135,7 +134,7 @@ class UserTupeOpertor(TupleOperator):
         global my_length
         n2one = True
         if (n2one == True):
-            #This demo will compute total length of field content for all tuple 
+            #This demo will compute the total length of field content for all tuple 
             if (tag_input == b'0' and tag_output == 't'):
                 #send end signal null
                 tag_output = '0'
@@ -160,7 +159,7 @@ class UserTupeOpertor(TupleOperator):
                     
         if(n2one == False):
             #we need to construct a output dict
-            #this demo will compute length of field "content"
+            #this demo will compute the length of field "content"
             if (tag_output == 'w'):
                 tag_output = 't'
             if (tag_input == 't'):
@@ -178,13 +177,9 @@ class UserTupeOpertor(TupleOperator):
                 tag_output = '0'
 
 def main():
-#    tuple_operator = TupleOperator()
-#    signal.signal(signal.SIGUSR2, tuple_operator.onsignal_usr2)
-    
     userTupeOpertor = UserTupeOpertor()
     signal.signal(signal.SIGUSR2, userTupeOpertor.onsignal_usr2)
 
-    print("Python loop start")
     while 1:
         sleep(1)
 								
