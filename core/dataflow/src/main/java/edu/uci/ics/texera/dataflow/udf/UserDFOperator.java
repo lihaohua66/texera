@@ -36,33 +36,9 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     private UserDFOperatorPredicate predicate;
     private Schema outputSchema;
     
-    /* 2 input signal:
-     *      TAG_NULL= "": result NULL
-     *      TAG_LEN = length of text
-     * 3 ouput signal:
-     *      TAG_NULL= "": result NULL
-     *      TAG_WAIT= Character.unsigned:   need to wait for next
-     *      TAG_LEN = length of text
-     */
-    // Signal write to buffer
-    int POSITION_PID = 0;
-    int POSITION_TAG = 10;
-    int POSITION_JSON = 20;
-    
-    String TAG_NULL = "0\n";
-    String TAG_WAIT = "w";
-    String TAG_LEN;
-    
-    //Signal used between processes
-    int IPC_SIG = 12;
-    String IPC_SIG_STRING = "USR2";
-    
-    // Named buffer in file system
-    
     private String inputFilePath = Utils.getResourcePath("input_java_python.txt", TexeraProject.TEXERA_DATAFLOW).toString();
     private String outputFilePath = Utils.getResourcePath("output_java_python.txt", TexeraProject.TEXERA_DATAFLOW).toString();
     private String pythonDebugOutputFilePath = Utils.getResourcePath("debug_output_python.txt", TexeraProject.TEXERA_DATAFLOW).toString();
-    final int mmapBufferSize = 1024* 8;
     
     private String PYTHON = "python3";
     private String PYTHONSCRIPT = Utils.getResourcePath("udf_operator.py", TexeraProject.TEXERA_DATAFLOW).toString();
@@ -96,14 +72,13 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
         // This function will initiate the communication between Java and the launched process.
         try {
             File inputFile = new File(inputFilePath);
-            
             //Delete the file; we will create a new file
             inputFile.delete();
             // Get file channel in readwrite mode
             inputFileChannel = new RandomAccessFile(inputFile, "rw").getChannel();
             
             // Get direct byte buffer access using channel.map() operation,    320*K bytes
-            inputBuffer = inputFileChannel.map(FileChannel.MapMode.READ_WRITE, 0, mmapBufferSize);
+            inputBuffer = inputFileChannel.map(FileChannel.MapMode.READ_WRITE, 0, predicate.mmapBufferSize);
             
             inputBuffer.position(0);
             inputBuffer.put((getJavaPID()+"\n").getBytes());
@@ -113,7 +88,7 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
             outputFile.delete();
             outputFileChannel = new RandomAccessFile(outputFile, "rw").getChannel();
             
-            outputBuffer = outputFileChannel.map(FileChannel.MapMode.READ_WRITE, 0, mmapBufferSize);
+            outputBuffer = outputFileChannel.map(FileChannel.MapMode.READ_WRITE, 0, predicate.mmapBufferSize);
             startPythonProcess();
             while ( true ) {
                 Thread.sleep(200);
@@ -129,53 +104,52 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
             }
         } catch (Exception e) {
             throw new TexeraException("Hands shaking Failed!");
-
         }
         return true;
     }
     
     
-    /* Return TAG-WAIT, TAG_NULL or TAG_LEN
+    /* Return one of the indications: TAG-WAIT, TAG_NULL or TAG_LEN
      * */
     public String getPythonPID() {
-        return readStringFromMMap(outputBuffer, POSITION_PID);
+        return readStringFromMMap(outputBuffer, predicate.POSITION_PID);
     }
     
     public String getTagFromOutputBuffer() {
         String strTag = "";
-        outputBuffer.position(POSITION_TAG);
+        outputBuffer.position(predicate.POSITION_TAG);
         while (true)
         {
             char ch;
             if ((ch = (char) outputBuffer.get()) == Character.UNASSIGNED) {
                 break;
             } else if (ch == 'w') {
-                strTag = TAG_WAIT;
+                strTag = predicate.TAG_WAIT;
                 break;
             }
             strTag += ch;
         }
         if(strTag.startsWith("0")) {
-            strTag =  TAG_NULL;
+            strTag =  predicate.TAG_NULL;
         }
-        //return the Tuple Json string length
+        //return the length of Tuple Json string.
         return strTag;
     }
     
     public void putTagIntoInputBuffer(String tag) {
-        inputBuffer.position(POSITION_TAG);
+        inputBuffer.position(predicate.POSITION_TAG);
         inputBuffer.put((tag + "\n").getBytes());
         inputBuffer.putChar((char) Character.UNASSIGNED);
     }
     
     public void putJsonIntoInputBuffer(String stringJson) {
-        inputBuffer.position(POSITION_JSON);
+        inputBuffer.position(predicate.POSITION_JSON);
         inputBuffer.put((stringJson).getBytes());
         inputBuffer.putChar((char) Character.UNASSIGNED);
     }
     
     public String getJsonFromOutputBuffer() {
-        return readStringFromMMap(outputBuffer, POSITION_JSON);
+        return readStringFromMMap(outputBuffer, predicate.POSITION_JSON);
     }
  // read a piece of buffer ended with unsigend character
     public String readStringFromMMap(MappedByteBuffer outputBuffer, int startPos) {
@@ -219,7 +193,6 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     
     @Override
     public void close() throws TexeraException {
-        // TODO Auto-generated method stub
         if (cursor == CLOSED) {
             return;
         }
@@ -232,15 +205,13 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     
     @Override
     public Schema getOutputSchema() {
-        // TODO Auto-generated method stub
         return outputSchema;
     }
 
     @SuppressWarnings("restriction")
     @Override
     public void handle(Signal arg0) {
-        // TODO Auto-generated method stub
-        if (arg0.getNumber() == IPC_SIG) {
+        if (arg0.getNumber() == predicate.IPC_SIG) {
             getPythonResult = true;
         }
     }
@@ -248,32 +219,26 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     @SuppressWarnings("restriction")
     @Override
     protected void setUp() throws TexeraException {
-        // TODO Auto-generated method stub
         Schema inputSchema = inputOperator.getOutputSchema();
-        Signal.handle(new Signal(IPC_SIG_STRING), this);
+        Signal.handle(new Signal(predicate.IPC_SIG_STRING), this);
         handShake();
         
         outputSchema = inputSchema;
     }
 
     @Override
-    protected Tuple computeNextMatchingTuple() throws TexeraException {
-        // TODO Auto-generated method stub
-        
+    protected Tuple computeNextMatchingTuple() throws TexeraException {        
         try {
             Tuple inputTuple = inputOperator.getNextTuple();
-            //write attribute content to input file
-            //    0          10               .20
-            //    | JavaPID  |Tag: length or Tags | Tuple Json  string
+            //write attribute content to input mmap buffer
             if (inputTuple == null) {
-                putTagIntoInputBuffer(TAG_NULL);
+                putTagIntoInputBuffer(predicate.TAG_NULL);
             } else {
                 String inputTupleText = new ObjectMapper().writeValueAsString(inputTuple);
                 putTagIntoInputBuffer(String.valueOf((new ObjectMapper().writeValueAsString(inputTuple)).length()));
                 putJsonIntoInputBuffer(inputTupleText);
             }
-            // notify python that data is ready
-//            Runtime.getRuntime().exec("kill -SIG" + IPC_SIG_STRING+" " + pythonPID.trim());
+
             notifyPython( pythonPID.trim() );
             
             for( ; ; ) {
@@ -284,14 +249,13 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
                 }
             }
             //Output from buffer
-            
             String strLenTag = getTagFromOutputBuffer();
             
-            if (strLenTag == TAG_WAIT) {
+            if (strLenTag == predicate.TAG_WAIT) {
                 this.getNextTuple();
             }
             
-            if(strLenTag == TAG_NULL) {
+            if(strLenTag == predicate.TAG_NULL) {
                 processPython.destroy();
                 return null;
             }
@@ -301,7 +265,6 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
             outputTuple = new ObjectMapper().readValue(outputTupleJsonStr.trim(), Tuple.class);
             outputSchema = outputTuple.getSchema();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             throw new TexeraException("MMap Operation Failed!");
         }
         return outputTuple;
@@ -309,14 +272,11 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
 
     @Override
     public Tuple processOneInputTuple(Tuple inputTuple) throws TexeraException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    protected void cleanUp() throws TexeraException {
-        // TODO Auto-generated method stub
-        
+    protected void cleanUp() throws TexeraException {        
     }
     
 }
