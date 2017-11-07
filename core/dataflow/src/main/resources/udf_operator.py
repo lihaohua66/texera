@@ -169,7 +169,7 @@ class UserTupeOpertor(TupleOperator):
                 attrName = "content"
                 attrType = "text"
                 value = len(self.get_valueByAttribute(attrName))
-                new_attrName = "local_length"
+                new_attrName = "length"
                 self.add_field(new_attrName, attrType, value)
                 
             if (tag_input == b'0'):
