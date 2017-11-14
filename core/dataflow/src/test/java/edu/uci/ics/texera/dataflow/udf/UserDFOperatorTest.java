@@ -64,7 +64,7 @@ public class UserDFOperatorTest {
     	for (Tuple tuple:listTuple) {
     		length += tuple.getField(textField).getValue().toString().length();
     	}
-    	return String.valueOf(length);    		
+    	return String.valueOf(length);
     }
     @AfterClass
     public static void cleanUp() throws TexeraException {
@@ -81,7 +81,7 @@ public class UserDFOperatorTest {
         int i = 0;
         String realLengthStr = null;
         // the new field name is "length"
-        while ((tuple = userDFOperator.getNextTuple()) != null) {
+        while (( tuple = userDFOperator.getNextTuple() ) != null) {
             realLengthStr = tuple.getField("length").getValue().toString();
         }
         userDFOperator.close();

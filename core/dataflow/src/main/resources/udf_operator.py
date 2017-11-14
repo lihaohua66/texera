@@ -127,7 +127,7 @@ class TupleOperator:
         self.map_output.close()
 
 #This is a demo User define function, user need to implement it.
-class UserTupeOpertor(TupleOperator):
+class UserTupleOpertor(TupleOperator):
     def user_defined_function(self):
         global n2one
         global tag_output
@@ -177,8 +177,8 @@ class UserTupeOpertor(TupleOperator):
                 tag_output = '0'
 
 def main():
-    userTupeOpertor = UserTupeOpertor()
-    signal.signal(signal.SIGUSR2, userTupeOpertor.onsignal_usr2)
+    userTupeOpertor = UserTupleOpertor()
+    signal.signal(signal.SIGUSR2, userTupleOpertor.onsignal_usr2)
 
     while 1:
         sleep(1)
