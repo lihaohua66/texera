@@ -73,7 +73,7 @@ public class UserDFOperatorTest {
     
     @Test
     public void test1() throws TexeraException {
-    	UserDFOperator userDFOperator = new UserDFOperator(new UserDFOperatorPredicate());
+    	UserDFOperator userDFOperator = new UserDFOperator(new UserDFOperatorPredicate("udf_operator_user.py"));
         userDFOperator.setInputOperator(inputOperator);
         
         userDFOperator.open();

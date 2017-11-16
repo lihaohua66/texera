@@ -254,13 +254,14 @@ public class PredicateBaseTest {
     }
     
     @Test
+    public void tesUserDFOperator() throws Exception {
+        testPredicate(new UserDFOperatorPredicate("filePath")) ;
+    }
+    
+    @Test
     public void testMysqlSink() throws Exception {
         testPredicate(new MysqlSinkPredicate("host", 1234, "db", "table", "user", "pass", null, null)) ;
     }
     
-    @Test
-    public void testU() throws Exception {
-    	UserDFOperatorPredicate userDFOperatorPredicate = new UserDFOperatorPredicate();
-    }
 
 }

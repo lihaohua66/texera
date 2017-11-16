@@ -44,7 +44,7 @@ public class TestCase {
         // TODO Auto-generated method stub
         inputOperator = new TupleSourceOperator(Arrays.asList(testTuple1, testTuple2, testTuple3), inputSchema);
         
-        UserDFOperator userDFOperator = new UserDFOperator(new UserDFOperatorPredicate());
+        UserDFOperator userDFOperator = new UserDFOperator(new UserDFOperatorPredicate("udf_operator_user.py"));
         userDFOperator.setInputOperator(inputOperator);
         
         userDFOperator.open();

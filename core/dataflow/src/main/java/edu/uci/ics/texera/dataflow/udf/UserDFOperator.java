@@ -6,6 +6,10 @@ import java.io.RandomAccessFile;
 import java.lang.management.ManagementFactory;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +45,11 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
     private String pythonDebugOutputFilePath = Utils.getResourcePath("debug_output_python.txt", TexeraProject.TEXERA_DATAFLOW).toString();
     
     private String PYTHON = "python3";
-    private String PYTHONSCRIPT = Utils.getResourcePath("udf_operator.py", TexeraProject.TEXERA_DATAFLOW).toString();
+    //private String PYTHONSCRIPT = Utils.getResourcePath("udf_operator.py", TexeraProject.TEXERA_DATAFLOW).toString();
+    private String PYTHONSCRIPT = Utils.getResourcePath("udf_operator_.py", TexeraProject.TEXERA_DATAFLOW).toString();
+    private String PYTHONSCRIPT_BASE = Utils.getResourcePath("udf_operator_base.py", TexeraProject.TEXERA_DATAFLOW).toString();
+    private String PYTHONSCRIPT_USER;// = Utils.getResourcePath("udf_operator_user.py", TexeraProject.TEXERA_DATAFLOW).toString();
+    
     private boolean getPythonResult = false;
     public Process processPython;
     private String pythonPID;
@@ -59,6 +67,7 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
         this.pythonPID = null;
         this.inputBuffer = null;
         this.outputBuffer = null;
+        this.PYTHONSCRIPT_USER = Utils.getResourcePath(predicate.getUserDefinedFunctionFile(), TexeraProject.TEXERA_DATAFLOW).toString();
     }
     
     private String getJavaPID() {
@@ -89,7 +98,10 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
             outputFileChannel = new RandomAccessFile(outputFile, "rw").getChannel();
             
             outputBuffer = outputFileChannel.map(FileChannel.MapMode.READ_WRITE, 0, predicate.mmapBufferSize);
+            
+            constructPythonScriptFile();
             startPythonProcess();
+            
             while ( true ) {
                 Thread.sleep(200);
                 if (getPythonResult) {
@@ -181,9 +193,21 @@ public class UserDFOperator extends AbstractSingleInputOperator implements Signa
         return 1;
     }
     
+    private void constructPythonScriptFile() throws IOException {
+    	List<String> readSmallTextFile = new ArrayList<>();
+    	List<String> readSmallTextFile2 = new ArrayList<>();
+    	
+    	readSmallTextFile = Files.readAllLines( Paths.get( PYTHONSCRIPT_BASE ), StandardCharsets.UTF_8 );
+    	readSmallTextFile2 = Files.readAllLines( Paths.get( PYTHONSCRIPT_USER ), StandardCharsets.UTF_8 );
+    	
+        Files.write( Paths.get( PYTHONSCRIPT ), readSmallTextFile, StandardCharsets.UTF_8 );
+        Files.write( Paths.get( PYTHONSCRIPT ), readSmallTextFile2, StandardOpenOption.APPEND );
+    }
+    
     public static void notifyPython(String pythonPID) throws IOException {
         Runtime.getRuntime().exec("kill -SIGUSR2 " + pythonPID);
     }
+    
     public void setInputOperator(IOperator operator) {
         if (cursor != CLOSED) {
             throw new TexeraException("Cannot link this operator to another operator after the operator is opened");
