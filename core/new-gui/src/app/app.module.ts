@@ -18,7 +18,6 @@ import { PropertyEditorComponent } from './workspace/component/property-editor/p
 import { OperatorViewComponent } from './workspace/component/operator-view/operator-view.component';
 import { ResultViewComponent } from './workspace/component/result-view/result-view.component';
 import { OperatorLabelComponent } from './workspace/component/operator-view/operator-label/operator-label.component';
-import { OperatorLabelSourceComponent } from './workspace/component/operator-view/operator-label/operator-label-source/operator-label-source.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +29,7 @@ import { OperatorLabelSourceComponent } from './workspace/component/operator-vie
     OperatorViewComponent,
     ResultViewComponent,
     OperatorLabelComponent,
-    OperatorLabelSourceComponent
+    
   ],
   imports: [
     BrowserModule,
