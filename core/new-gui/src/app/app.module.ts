@@ -18,6 +18,10 @@ import { PropertyEditorComponent } from './workspace/component/property-editor/p
 import { OperatorViewComponent } from './workspace/component/operator-view/operator-view.component';
 import { ResultViewComponent } from './workspace/component/result-view/result-view.component';
 import { OperatorLabelComponent } from './workspace/component/operator-view/operator-label/operator-label.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { startWith } from 'rxjs/operators/startWith';
+import { map } from 'rxjs/operators/map';
 
 @NgModule({
   declarations: [
@@ -29,6 +33,7 @@ import { OperatorLabelComponent } from './workspace/component/operator-view/oper
     OperatorViewComponent,
     ResultViewComponent,
     OperatorLabelComponent,
+
     
   ],
   imports: [
@@ -41,6 +46,9 @@ import { OperatorLabelComponent } from './workspace/component/operator-view/oper
     CustomNgMaterialModule,
     BrowserAnimationsModule,
     JsonSchemaFormModule,
+    ReactiveFormsModule,
+    FormsModule,
+
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]

@@ -14,19 +14,6 @@ import { WorkflowModelService } from '../service/workflow-graph/workflow-model.s
 import { WorkflowDataChangeService } from '../service/workflow-graph/workflow-data-change.service';
 import { WorkflowUIChangeService } from '../service/workflow-graph/workflow-ui-change.service';
 
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-@NgModule({
-  imports: [
-    BrowserModule,
-    FormsModule,
-
-  ],
-})
-
-export class AppModule { }
 @Component({
   selector: 'texera-workspace',
   templateUrl: './workspace.component.html',
