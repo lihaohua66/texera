@@ -1,0 +1,6 @@
+@mixin grid-container($cStart, $cEnd, $rStart, $rEnd) {
+    grid-column-start: $cStart;
+    grid-column-end: $cEnd;
+    grid-row-start: $rStart;
+    grid-row-end: $rEnd;
+}

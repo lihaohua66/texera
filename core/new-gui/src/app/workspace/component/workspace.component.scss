@@ -1,6 +1,7 @@
 @import "~bootswatch/dist/cosmo/variables";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootswatch/dist/cosmo/bootswatch";
+@import "../../app.component";
 
 .grid-container {
   min-width: 100%;
@@ -22,36 +23,21 @@ $header-height: 56px;
 }
 
 .texera-navigation-grid-container {
-  grid-column-start: 1;
-  grid-column-end: 4;
-  grid-row-start: 1;
-  grid-row-end: 2;
+  @include grid-container(1, 4, 1, 2);
 }
 
 .texera-operator-view-grid-container {
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row-start: 2;
-  grid-row-end: 4;
+  @include grid-container(1, 2, 2, 4);
 }
 
 .texera-property-editor-grid-container {
-  grid-column-start: 3;
-  grid-column-end: 4;
-  grid-row-start: 2;
-  grid-row-end: 4;
+  @include grid-container(3, 4, 2, 4);
 }
 
 .texera-workflow-editor-grid-container {
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row-start: 2;
-  grid-row-end: 3;
+  @include grid-container(2, 3, 2, 3);
 }
 
 .texera-result-view-grid-container {
-  grid-column-start: 2;
-  grid-column-end: 3;
-  grid-row-start: 3;
-  grid-row-end: 4;
+  @include grid-container(2, 3, 3, 4);
 }
