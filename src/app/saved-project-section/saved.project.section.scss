@@ -1,0 +1,25 @@
+@import '../style.scss';
+
+$linkColor: rgb(66, 23, 134);
+
+/* link */
+
+a{
+    &:link {
+        background-color: transparent; 
+        text-decoration: none;
+    }
+    
+    &:visited {
+        color: $linkColor;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    &:hover {
+        color: $linkColor;
+        background-color: rgb(233, 229, 229);
+        border-radius: 2px;
+        text-decoration: none;
+    }
+}

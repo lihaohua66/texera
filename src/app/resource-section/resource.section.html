@@ -1,0 +1,22 @@
+<div fxLayout="column" fxFlexFill>
+    
+  <mat-card fxFlex = "1 1 80%" fxFlexOffset = "5%">
+    <mat-card-content>
+      <mat-list >
+       <h2 style="font-family:Roboto, Arial, sans-serif;">Dictionaries</h2>
+        <div class = "scroll">
+          <mat-list-item *ngFor="let dictionary of distionaryList" 
+              style="
+                border: 1px solid #d2d7df;
+                border-radius: 3px;
+                margin-bottom : 5px;
+                ">
+                <p>{{dictionary}}&emsp;&emsp;&emsp;&emsp;&emsp;</p>
+                <button mat-button color="primary" (click)="open(dictionary)">View</button>
+        </mat-list-item>
+        </div>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+</div>

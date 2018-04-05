@@ -1,0 +1,21 @@
+@import '../style.scss';
+
+.select-bar-list{
+    list-style-type: none;
+  }
+  
+.select-bar-btn{
+    width: 160px;
+    height: 100px;
+    font-weight: bold;
+    font-size: 22px;
+    text-align: center;
+    background-color: #0e74b4;
+    color: $bthColor;
+    display:block;
+  
+    &:hover{
+      background-color: #06223f
+    }
+  
+}

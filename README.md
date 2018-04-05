@@ -1,7 +1,27 @@
-"# portalInterview" 
-The helloWorld is included in the file 'helloWorld'
-The event planner is not finished. I create the class 'eventPlan' and the users choose to type in the event information (name, year, month, day, time) or quit adding events. 
-There is a array in eventPlan and the event information typed by user are saved as objects and push into the array. 
-For day, month and year, they are easy to see if overlaped.
-If all of them above are overlaped, then transfer the time into float number (hour.minu) and pm is the (hour + 12 . minu)
-deciding if overlape with previous event.
+# IsaacTexeraConsole
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.1.
+
+## Development server
+
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+## Code scaffolding
+
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+## Build
+
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

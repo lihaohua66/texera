@@ -1,0 +1,54 @@
+
+
+<div fxLayout="column" fxFlexFill>
+    
+      <mat-card fxFlex = "1 1 12%">
+        <!-- <mat-card-content>
+        <button class="sort-btn" mat-button color="primary" [matMenuTriggerFor]="menu" fxFlexOffset = "75%" fxFlex = "1 1 8%">Sort</button>
+        <mat-menu #menu="matMenu" yPosition="above" overlapTrigger= "true">
+          <button mat-menu-item (click)="lastSort()">by Time</button>
+          <button mat-menu-item (click)="dateSort()">by Create-Time</button>
+          <button mat-menu-item (click)="ascSort()">A-Z</button>
+          <button mat-menu-item (click)="dscSort()">Z-A</button>
+        </mat-menu>
+        </mat-card-content> -->
+
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn btn-outline-primary" id="sortDropdown" ngbDropdownToggle>Sort</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="sorting_func" (click)="lastSort()">by Time</button><br/><p></p>
+            <button class="sorting_func" (click)="dateSort()">by Create-Time</button><br/><p></p>
+            <button class="sorting_func" (click)="ascSort()">A-Z</button><br/><p></p>
+            <button class="sorting_func" (click)="dscSort()">Z-A</button>
+          </div>
+        </div>
+      </mat-card>
+
+        
+      <mat-card fxFlex = "1 1 87.5%">
+        <mat-card-content>
+    
+          <mat-list >
+            <div fxLayout = "row">
+              <h2 style="font-family:Roboto, Arial, sans-serif;">Projects</h2>
+              <button mat-button color="primary" fxFlexOffset = "10em" (click)="open()">Add</button>
+            </div>
+            <div class = "scroll">
+            <mat-list-item *ngFor="let project of projects"
+                      style="
+                        border: 1px solid #d2d7df;
+                        border-radius: 3px;
+                        margin-bottom : 5px;
+                        ">
+    
+              <h3 mat-line style="font-size:20px; font-family:Roboto, Arial, sans-serif;"><a href={{defaultWeb}}>{{project.name}}</a></h3>
+              <p mat-line style="font-family:Roboto, Arial, sans-serif;color:gray" > <br>
+                {{project.last_modified_time | date:'yyyy-MM-dd HH:mm:ss Z'}}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Created: {{project.creation_time | date:'yyyy-MM-dd HH:mm:ss Z'}} 
+              </p>
+            </mat-list-item>
+            </div>
+          </mat-list>
+    
+        </mat-card-content>
+      </mat-card>
+</div>

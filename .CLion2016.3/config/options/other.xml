@@ -1,8 +1,0 @@
-<application>
-  <component name="CPPToolchains">
-    <option name="cygwinHomePath" value="C:\Users\niuni\Desktop\PG Software\ICS 46 CLion" />
-    <option name="detectedVersion" value="4" />
-    <option name="minGWHomePath" value="C:\Program Files (x86)\mingw-w64\i686-5.3.0-posix-dwarf-rt_v4-rev0\mingw32" />
-    <option name="winEnvironment" value="CYGWIN" />
-  </component>
-</application>

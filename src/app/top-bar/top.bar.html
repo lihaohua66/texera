@@ -1,0 +1,6 @@
+<p class="top-bar-brand" fxFlex = "1 1 7%" fxFlexOrder fxFlexOffset = "3%" fxFlexAlign="center" fxFlexFill>{{brand}}</p>
+<div fxFlex = "1 1 80%" fxFlexOrder fxLayout = "row" fxLayoutWrap fxFlexAlign = "center" fxFlexFill>
+  <button ngbButton (onclick)="customer_Interface" [routerLink]="['/']" class="top-bar-btn" fxFlex = "1 1 10%" fxFlexOffset = "12%" >Editor</button>
+  <!-- <button (onclick)="user_Interface" class="top-bar-btn" fxFlex = "1 1 10%" fxFlexOffset = "12%">Console</button> -->
+</div>
+<userAccount fxFlex = "1 1 10%" fxFlexOrder fxFlexAlign = "center"></userAccount>

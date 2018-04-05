@@ -1,0 +1,24 @@
+[
+	"immigration policy",
+	"gun control",
+	"police violence"
+]
+
+{
+	"immigration policy": ["trump", "daca", "wall", "mexico"],
+	"gun control": ["gun", "shooting"],
+	"police violence" : ["BLM", "police"]
+}
+
+
+
+
+// return a list of dictionary names
+// a = get(texera.../api/getDictionaries);
+// a = dictionaryNames
+
+
+// for (i in a) {
+	// entries = =get(texera///api/dictionary?name=i)
+	// entries = dictionaryEntryMap[i];
+// }

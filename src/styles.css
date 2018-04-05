@@ -1,0 +1,7 @@
+/* You can add global styles to this file, and also import other style files */
+app-root {
+    
+    height: 100vh;
+    display: block;
+    min-height: 100vh;
+}

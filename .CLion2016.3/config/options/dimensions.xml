@@ -1,7 +1,0 @@
-<application>
-  <component name="DimensionService">
-    <location key="WELCOME_SCREEN.0.0.1920.1080@144dpi" x="959" y="345" />
-    <location key="com.intellij.ide.util.TipDialog.0.0.1920.1080@144dpi" x="637" y="297" />
-    <size key="NewCMakeProjectWizard.0.0.1920.1080@144dpi" width="750" height="300" />
-  </component>
-</application>
