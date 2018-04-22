@@ -22,12 +22,13 @@ import { PropertyEditorComponent } from './workspace/component/property-editor/p
 import { OperatorViewComponent } from './workspace/component/operator-view/operator-view.component';
 import { ResultViewComponent } from './workspace/component/result-view/result-view.component';
 import { OperatorLabelComponent } from './workspace/component/operator-view/operator-label/operator-label.component';
+import { NewUserTourComponent } from './workspace/component/new-user-tour/new-user-tour.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
 
-import { NgxBootstrapProductTourModule } from 'ngx-bootstrap-product-tour';
+import { NgxBootstrapProductTourModule } from '../lib/ngx-bootstrap-product-tour';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { RouterModule } from '@angular/router';
     OperatorViewComponent,
     ResultViewComponent,
     OperatorLabelComponent,
+    NewUserTourComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +60,10 @@ import { RouterModule } from '@angular/router';
     NgbModule.forRoot(),
     BrowserModule,
     NgxBootstrapProductTourModule.forRoot(),
+    RouterModule.forRoot([{
+      component: NewUserTourComponent,
+      path: '',
+    }]),
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]
