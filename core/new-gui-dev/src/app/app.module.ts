@@ -27,6 +27,9 @@ import { FormsModule } from '@angular/forms';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
 
+import { NgxBootstrapProductTourModule } from 'ngx-bootstrap-product-tour';
+import { RouterModule } from '@angular/router';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +55,9 @@ import { map } from 'rxjs/operators/map';
     JsonSchemaFormModule.forRoot(MaterialDesignFrameworkModule),
     ReactiveFormsModule,
     FormsModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    BrowserModule,
+    NgxBootstrapProductTourModule.forRoot(),
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]
