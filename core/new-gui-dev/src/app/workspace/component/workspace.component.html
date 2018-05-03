@@ -1,7 +1,12 @@
+
+<router-outlet></router-outlet>
+<tour-step-template></tour-step-template>
+
 <div class="mat-typography texera-workspace-grid-container grid-container">
-  <texera-navigation class="texera-navigation-grid-container grid-container"></texera-navigation>
-  <texera-operator-view class="texera-operator-view-grid-container grid-container"></texera-operator-view>
-  <texera-property-editor class="texera-property-editor-grid-container grid-container"></texera-property-editor>
-  <texera-workflow-editor class="texera-workflow-editor-grid-container grid-container"></texera-workflow-editor>
-  <texera-result-view class="texera-result-view-grid-container grid-container"></texera-result-view>
+  <texera-navigation tourAnchor="nav" class="texera-navigation-grid-container grid-container"></texera-navigation>
+  <texera-operator-view tourAnchor="operator" class="texera-operator-view-grid-container grid-container"></texera-operator-view>
+  <texera-property-editor tourAnchor="property" class="texera-property-editor-grid-container grid-container"></texera-property-editor>
+  <texera-workflow-editor tourAnchor="workflow" class="texera-workflow-editor-grid-container grid-container"></texera-workflow-editor>
+  <texera-result-view tourAnchor="result" class="texera-result-view-grid-container grid-container"></texera-result-view>
 </div>
+<a style="cursor: pointer" (click)="tourService.toggle()" class="btn btn-primary" tourAnchor="start.tour">Start Demo Tour</a>

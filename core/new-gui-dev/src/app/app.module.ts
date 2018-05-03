@@ -27,6 +27,11 @@ import { FormsModule } from '@angular/forms';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
 
+import { TourMatMenuModule } from 'ngx-tour-md-menu';
+import { RouterModule } from '@angular/router';
+import { routers } from 'jointjs';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +57,9 @@ import { map } from 'rxjs/operators/map';
     JsonSchemaFormModule.forRoot(MaterialDesignFrameworkModule),
     ReactiveFormsModule,
     FormsModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+
+    TourMatMenuModule.forRoot(),
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]

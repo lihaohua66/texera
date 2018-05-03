@@ -22,6 +22,8 @@ import { OperatorUIElementService } from '../service/operator-ui-element/operato
 
 import { TableAutocompleteService } from '../service/property-autocomplete/table-autocomplete.service';
 
+import { TourService } from 'ngx-tour-md-menu';
+
 
 @Component({
   selector: 'texera-workspace',
@@ -45,6 +47,7 @@ import { TableAutocompleteService } from '../service/property-autocomplete/table
 
     TableAutocompleteService,
 
+    TourService,
   ]
 })
 export class WorkspaceComponent implements OnInit {
@@ -67,8 +70,37 @@ export class WorkspaceComponent implements OnInit {
     private executeWorkflowService: ExecuteWorkflowService,
     private operatorDragDropService: OperatorDragDropService,
     private operatorUIElementService: OperatorUIElementService,
-    private tableAutocompleteService: TableAutocompleteService
-  ) { }
+    private tableAutocompleteService: TableAutocompleteService,
+
+    public tourService: TourService
+  ) {
+    this.tourService.initialize([{
+      anchorId: 'start.tour',
+      content: 'Welcome to Texera!',
+      placement: 'below',
+      title: 'Welcome',
+    }, {
+      anchorId: 'nav',
+      content: 'here is the navigation bar',
+      title: 'Navigation bar',
+      placement: 'below',
+      stepId: 'a',
+    }, {
+      anchorId: 'operator',
+      content: 'here are the operators',
+      title: 'operator',
+      placement: 'below',
+    }, {
+      anchorId: 'property',
+      content: 'here\'s the property view',
+      title: 'property view',
+      placement: 'below'
+    }], {
+      route: '',
+    }
+  );
+    this.tourService.start();
+  }
 
   ngOnInit() {
     this.operatorMetadataService.fetchAllOperatorMetadata();
