@@ -26,6 +26,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
+import { RouterModule } from '@angular/router';
+import { TourNgxPopperModule } from 'ngx-tour-ngx-popper';
+import { NgxPopperModule } from 'ngx-popper';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import { map } from 'rxjs/operators/map';
     JsonSchemaFormModule.forRoot(MaterialDesignFrameworkModule),
     ReactiveFormsModule,
     FormsModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    RouterModule.forRoot([{
+      
+    }])
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]
