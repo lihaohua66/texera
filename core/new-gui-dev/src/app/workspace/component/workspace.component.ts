@@ -84,7 +84,7 @@ export class WorkspaceComponent implements OnInit {
         hideOnClickOutside: true,
       }
     }, {
-      anchorId: 'texera-operator-label-ScanSource',
+      anchorId: 'operatorLabelID',
       content: 'drag this operator and drop it in the workflow panel',
       placement: 'right',
       title: 'Operator',

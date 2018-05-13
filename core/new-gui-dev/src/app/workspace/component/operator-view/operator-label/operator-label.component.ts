@@ -24,7 +24,6 @@ export class OperatorLabelComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.operatorLabelID = 'texera-operator-label-'  + this.operator.operatorType;
-    console.log(this.operatorLabelID);
   }
 
   ngAfterViewInit() {
