@@ -56,9 +56,7 @@ import { NgxPopperModule } from 'ngx-popper';
     ReactiveFormsModule,
     FormsModule,
     NgbModule.forRoot(),
-    RouterModule.forRoot([{
-      
-    }])
+    TourNgxPopperModule.forRoot()
   ],
   providers: [ HttpClientModule ],
   bootstrap: [AppComponent]

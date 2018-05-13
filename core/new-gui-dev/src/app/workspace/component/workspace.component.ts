@@ -21,7 +21,7 @@ import { OperatorDragDropService } from '../service/operator-drag-drop/operator-
 import { OperatorUIElementService } from '../service/operator-ui-element/operator-ui-element.service';
 
 import { TableAutocompleteService } from '../service/property-autocomplete/table-autocomplete.service';
-
+import { TourService } from 'ngx-tour-ngx-popper';
 
 @Component({
   selector: 'texera-workspace',
@@ -67,8 +67,34 @@ export class WorkspaceComponent implements OnInit {
     private executeWorkflowService: ExecuteWorkflowService,
     private operatorDragDropService: OperatorDragDropService,
     private operatorUIElementService: OperatorUIElementService,
-    private tableAutocompleteService: TableAutocompleteService
-  ) { }
+    private tableAutocompleteService: TableAutocompleteService,
+    public tourService: TourService
+  ) {
+    this.tourService.initialize([{
+      anchorId: 'navigation',
+      content: 'Welcome',
+      placement: 'bottom',
+      title: 'Welcome',
+    }, {
+      anchorId: 'operator',
+      content: 'Here is the operator view Now try to open one',
+      placement: 'right',
+      title: 'Operator Panel',
+      popperSettings: {
+        hideOnClickOutside: true,
+      }
+    }, {
+      anchorId: 'texera-operator-label-ScanSource',
+      content: 'drag this operator and drop it in the workflow panel',
+      placement: 'right',
+      title: 'Operator',
+      popperSettings: {
+        showTrigger: 'click',
+      }
+    }
+
+    ]);
+  }
 
   ngOnInit() {
     this.operatorMetadataService.fetchAllOperatorMetadata();
