@@ -25,6 +25,7 @@ import { TableAutocompleteService } from '../service/property-autocomplete/table
 
 
 
+
 @Component({
   selector: 'texera-workspace',
   templateUrl: './workspace.component.html',
@@ -71,7 +72,7 @@ export class WorkspaceComponent implements OnInit {
     private executeWorkflowService: ExecuteWorkflowService,
     private operatorDragDropService: OperatorDragDropService,
     private operatorUIElementService: OperatorUIElementService,
-    private tableAutocompleteService: TableAutocompleteService
+    private tableAutocompleteService: TableAutocompleteService,
   ) {}
 
   ngOnInit() {

@@ -145,5 +145,7 @@ export class OperatorViewComponent implements OnInit {
     return value.additionalMetadata.userFriendlyName;
   }
 
+
+
 }
 

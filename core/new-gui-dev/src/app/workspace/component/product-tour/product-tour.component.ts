@@ -19,7 +19,7 @@ export class ProductTourComponent implements OnInit {
     {
       element: '#mat-expansion-panel-header-0',
       intro:'Now open this section',
-      position:'right'
+      position:'right',
     },
     {
       element: '#texera-operator-label-ScanSource',
@@ -32,10 +32,13 @@ export class ProductTourComponent implements OnInit {
   inTour = false;
 
 
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit() {
   }
+
+  
 
   startTour() {
     // Start tutorial
@@ -48,13 +51,13 @@ export class ProductTourComponent implements OnInit {
     this.intro.onexit(function() {
       this.inTour = false;
     });
-    console.log("Test");
-  }
+    this.intro.onbeforechange(function() {
+      if(this._currentStep === 3) {
+        console.log(3);
+        document.getElementById('mat-expansion-panel-header-0').click();
+      }
+  });
 
-  step(num) {
-    if(this.inTour == true) {
-      this.intro.goToStep(num);
-    };
   }
 
 }
