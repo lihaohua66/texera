@@ -5,6 +5,7 @@ import { OperatorViewComponent } from './operator-view/operator-view.component';
 import { WorkflowEditorComponent } from './workflow-editor/workflow-editor.component';
 import { ResultViewComponent } from './result-view/result-view.component';
 import { PropertyEditorComponent } from './property-editor/property-editor.component';
+import { ProductTourComponent } from './product-tour/product-tour.component';
 
 import { OperatorMetadataService } from '../service/operator-metadata/operator-metadata.service';
 
@@ -76,26 +77,6 @@ export class WorkspaceComponent implements OnInit {
   ngOnInit() {
     this.operatorMetadataService.fetchAllOperatorMetadata();
     this.tableAutocompleteService.fetchAllTableMetadata();
-  }
-
-  startTour() {
-    console.log("Starting tour");
-    const IntroJs = require('../../../../node_modules/intro.js/intro.js');
-    let intro = IntroJs.introJs();
-
-    // Initialize steps
-    intro.setOptions({
-        steps: [
-            {
-                element: '.texera-navigation-grid-container',
-                intro: "Welcome!",
-                position: 'bottom'
-            }
-        ]
-    });
-
-    // Start tutorial
-    intro.start();
   }
 
 }
