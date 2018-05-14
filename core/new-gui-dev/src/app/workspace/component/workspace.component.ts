@@ -23,6 +23,7 @@ import { OperatorUIElementService } from '../service/operator-ui-element/operato
 import { TableAutocompleteService } from '../service/property-autocomplete/table-autocomplete.service';
 
 
+
 @Component({
   selector: 'texera-workspace',
   templateUrl: './workspace.component.html',
@@ -49,6 +50,8 @@ import { TableAutocompleteService } from '../service/property-autocomplete/table
 })
 export class WorkspaceComponent implements OnInit {
 
+  
+
 /**
  * Use all the services here.
  * Because the stupid Angular Dependency Injector won't initialize the
@@ -68,11 +71,31 @@ export class WorkspaceComponent implements OnInit {
     private operatorDragDropService: OperatorDragDropService,
     private operatorUIElementService: OperatorUIElementService,
     private tableAutocompleteService: TableAutocompleteService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.operatorMetadataService.fetchAllOperatorMetadata();
     this.tableAutocompleteService.fetchAllTableMetadata();
+  }
+
+  startTour() {
+    console.log("Starting tour");
+    const IntroJs = require('../../../../node_modules/intro.js/intro.js');
+    let intro = IntroJs.introJs();
+
+    // Initialize steps
+    intro.setOptions({
+        steps: [
+            {
+                element: '.texera-navigation-grid-container',
+                intro: "Welcome!",
+                position: 'bottom'
+            }
+        ]
+    });
+
+    // Start tutorial
+    intro.start();
   }
 
 }

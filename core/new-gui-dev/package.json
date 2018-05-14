@@ -31,6 +31,7 @@
     "dagre": "^0.8.2",
     "font-awesome": "^4.7.0",
     "fuse.js": "^3.2.0",
+    "intro.js": "^2.9.3",
     "jointjs": "^2.0.0",
     "jquery": "^3.1.1",
     "jquery-ui-dist": "^1.12.1",

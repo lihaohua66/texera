@@ -22,14 +22,16 @@
       "../node_modules/jointjs/css/themes/material.css",
       "../node_modules/jointjs/css/themes/default.css",
       "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-      "styles.scss"
+      "styles.scss",
+      "../node_modules/intro.js/minified/introjs.min.css"
     ],
     "scripts": [
       "../node_modules/jquery/dist/jquery.js",
       "../node_modules/jquery-ui-dist/jquery-ui.js",
       "../node_modules/lodash/index.js",
       "../node_modules/backbone/backbone.js",
-      "../node_modules/jointjs/dist/joint.js"
+      "../node_modules/jointjs/dist/joint.js",
+      "../node_modules/intro.js/minified/intro.min.js"
     ],
     "environmentSource": "environments/environment.ts",
     "environments": {
