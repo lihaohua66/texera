@@ -77,6 +77,12 @@ export class WorkflowEditorComponent implements AfterViewInit {
         this.graph.addCell(link);
       }
     );
+
+    this.graph.on('change:source change:target', function(link) {
+      if (link.get('source').id && link.get('target').id) {
+          // both ends of the link are connected.
+      }
+    });
   }
 
   /**
