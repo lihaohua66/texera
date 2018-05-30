@@ -1,6 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { OperatorUIElementService } from '../../service/operator-ui-element/operator-ui-element.service';
+
+import { OperatorMetadataService } from '../../service/operator-metadata/operator-metadata.service';
+
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { startWith } from 'rxjs/operators/startWith';
+import { map } from 'rxjs/operators/map';
+
 import { WorkflowModelActionService } from '../../service/workflow-graph/model-action/workflow-model-action.service';
+import { WorkflowGraphUtilsService } from '../../service/workflow-graph/utils/workflow-graph-utils.service';
+import { WorkflowViewEventService } from '../../service/workflow-graph/view-event/workflow-view-event.service';
+import { SmartOperatorLocation } from '../operator-view/smart-operator-location';
+import { WorkflowTexeraGraphService } from '../../service/workflow-graph/model/workflow-texera-graph.service';
+import { WorkflowJointGraphService } from '../../service/workflow-graph/model/workflow-joint-graph.service';
 
 @Component({
   selector: 'texera-product-tour',
@@ -20,7 +32,7 @@ export class ProductTourComponent implements OnInit {
     },
     {
       element: '.texera-property-editor-grid-container',
-      intro: '<h1>Properties</h1><br><p style="font-size:15px;">You can edit the propertyof each operator here.</p>',
+      intro: '<h1>Properties</h1><br><p style="font-size:15px;">You can edit the property of each operator here.</p>',
       position: 'right'
     },
     {
@@ -61,15 +73,34 @@ export class ProductTourComponent implements OnInit {
 
   inTour = false;
 
+  private smartOperatorLocation: SmartOperatorLocation;
 
   constructor(
-    private workflowModelActionService: WorkflowModelActionService
-  ) {}
+    private operatorMetadataService: OperatorMetadataService,
+    private workflowModelActionService: WorkflowModelActionService,
+    private workflowGraphUtilsService: WorkflowGraphUtilsService,
+    private workflowViewEventService: WorkflowViewEventService,
+    private workflowTexeraGraphService: WorkflowTexeraGraphService,
+    private workflowJointGraphService: WorkflowJointGraphService
+  ) {
+    this.smartOperatorLocation = new SmartOperatorLocation(this.workflowTexeraGraphService, this.workflowJointGraphService);
+  }
 
   ngOnInit() {
   }
 
-  
+  private createScanSourceOperator(): void {
+    //if (introJsObject._currentStep === 7){
+    //  console.log(7);
+    //    document.getElementById('mat-expansion-panel-header-0').click();
+    //} else if (introJsObject._currentStep === 9) {
+      const operatorUIElement = this.workflowGraphUtilsService.getNewOperatorPredicate('ScanSource');
+      const smartLocation = this.smartOperatorLocation.suggestNextLocation('ScanSource');
+      this.workflowModelActionService.addOperator(
+            operatorUIElement, smartLocation.x, smartLocation.y);
+      this.workflowViewEventService.operatorSelectedInEditor.next({operatorID: operatorUIElement.operatorID});
+    //}
+  };
 
   startTour() {
     // Start tutorial
@@ -82,17 +113,18 @@ export class ProductTourComponent implements OnInit {
     this.intro.onexit(function() {
       this.inTour = false;
     });
-    this.intro.onbeforechange(function() {
+    let self = this;
+    this.intro.onbeforechange(function() 
+    {
       if (this._currentStep === 7) {
         console.log(7);
         document.getElementById('mat-expansion-panel-header-0').click();
       } else if (this._currentStep === 9) {
         console.log(9);
-        const operatorUIElement = this.operatorUIElementService.getOperatorUIElement(
-          'ScanSource', 'temporary-dragging-operator');
-        this.workflowModelActionService.addOperator(operatorUIElement, 140, 20);
+        self.createScanSourceOperator();
       }
-  });
+  }
+);
 
   }
 
