@@ -23,7 +23,7 @@ export class ProductTourComponent implements OnInit {
 
   steps = [
     {
-      intro: '<h1>Welcome to Texera!</h1><br>Texera is a system to support cloud-based text analytics using declarative and GUI-based workflows.<br><img src="../../../../assets/Tutor_Intro_Sample.png" height="400" width="600">',
+      intro: '<h1>Welcome to Texera!</h1><br>Texera is a system to support cloud-based text analytics using declarative and GUI-based workflows.<br><img src="../../../../assets/Tutor_Intro_Sample.png" height="400" width="800">',
     },
     {
       element: '.texera-operator-view-grid-container',
@@ -65,13 +65,41 @@ export class ProductTourComponent implements OnInit {
     },
     {
       element: '.texera-workflow-editor-grid-container',
-      intro: 'Here is the workflow Panel, now we will edit the operator attribute',
+      intro: '<h1>Here is the workflow Panel</h1><br> now we will edit the operator attribute',
       position: 'right'
     },
     {
       element: '.texera-property-editor-grid-container',
-      intro: 'Here is the <b>Operator Property Editor</b>, now try to edit the property of SourceScan Operator, type <b>twitter_sample</b><br><img src="../../../../assets/Tutor_Property_Sample.gif">',
+      intro: '<h1>Here is the <b>Operator Property Editor</b></h1><b> now try to edit the property of SourceScan Operator, type <b>twitter_sample</b><br><img src="../../../../assets/Tutor_Property_Sample.gif">',
       position: 'right'
+    },
+    {
+      element: '#mat-expansion-panel-header-7',
+      intro: 'Now open this section',
+      position: 'right',
+    },
+    {
+      element: '#texera-operator-label-ViewResults',
+      intro: 'Drag this and drop to workflow',
+      position: 'right'
+    },
+    {
+      element: '.texera-workflow-editor-grid-container',
+      intro: '<h1>Connect those two operators</h1><br><img src="../../../../assets/Tutor_JointJS_Sample.gif">',
+      position: 'right'
+    },
+    {
+      element: '#texera-workspace-navigation-run',
+      intro: '<h1>Click the run button</h1>',
+      position: 'buttom'
+    },
+    {
+      element: '.texera-result-view-grid-container',
+      intro: '<h1>You can view the result here</h1>',
+      position: 'right'
+    },
+    {
+      intro: '<h1>Congradulation!</h1><br><h2>You have finish the basic tutorial, now you can start your own workflow</h2><br><img src="../../../../assets/Tutor_End_Sample.gif">',
     }
   ];
   intro = require('../../../../../node_modules/intro.js/intro.js').introJs();
@@ -113,7 +141,7 @@ export class ProductTourComponent implements OnInit {
       steps: this.steps,
       showStepNumbers: true,
       exitOnOverlayClick: false,
-      disableInteraction: true,
+      disableInteraction: false,
       tooltipClass: 'customDefault'
     });
     this.intro.start();
@@ -130,13 +158,18 @@ export class ProductTourComponent implements OnInit {
       } else if (this._currentStep === 9) {
         console.log(9);
         self.createScanSourceOperator("ScanSource");
-      } else if (this._currentStep === 11) {
-        this.intro.setOptions({
-          disableInteraction: false
-        });
+        document.getElementById('mat-expansion-panel-header-0').click();
+      } else if (this._currentStep === 12) {
+        document.getElementById('mat-expansion-panel-header-7').click();
+      } else if(this._currentStep === 13) {
+        self.createScanSourceOperator("ViewResults");
       }
-  }
-);
+  });
+  this.intro.onexit(function ()
+  {
+    location.reload();
+  });
+
 
   }
 
