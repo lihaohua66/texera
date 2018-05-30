@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {} from 
+import { OperatorUIElementService } from '../../service/operator-ui-element/operator-ui-element.service';
+import { WorkflowModelActionService } from '../../service/workflow-graph/model-action/workflow-model-action.service';
 
 @Component({
   selector: 'texera-product-tour',
@@ -50,19 +51,20 @@ export class ProductTourComponent implements OnInit {
       intro: 'Drag this and drop to workflow',
       position: 'right'
     },
-    // {
-    //   element: '',
-    //   intro: '',
-    //   position: 'right'
-    // }
+    {
+      element: '.texera-workflow-editor-grid-container',
+      intro: 'Click on this operator and see the next step',
+      position: 'right'
+    }
   ];
   intro = require('../../../../../node_modules/intro.js/intro.js').introJs();
 
   inTour = false;
 
 
-  constructor() {
-  }
+  constructor(
+    private workflowModelActionService: WorkflowModelActionService
+  ) {}
 
   ngOnInit() {
   }
@@ -84,10 +86,10 @@ export class ProductTourComponent implements OnInit {
       if (this._currentStep === 7) {
         console.log(7);
         document.getElementById('mat-expansion-panel-header-0').click();
-      } else if (this._currentStep === 9){
+      } else if (this._currentStep === 9) {
         console.log(9);
         const operatorUIElement = this.operatorUIElementService.getOperatorUIElement(
-          'texera-operator-label-ScanSource', 'temporary-dragging-operator');
+          'ScanSource', 'temporary-dragging-operator');
         this.workflowModelActionService.addOperator(operatorUIElement, 140, 20);
       }
   });
