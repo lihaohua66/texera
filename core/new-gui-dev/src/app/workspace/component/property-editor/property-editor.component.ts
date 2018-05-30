@@ -99,7 +99,8 @@ export class PropertyEditorComponent implements OnInit {
   onFormChanges(event: Object) {
     // this.formChangeTimes++;
     // console.log('onform changes called');
-    // console.log(event);
+     console.log(event);
+     console.log(this.operatorID);
     // console.log('called ' + this.formChangeTimes.toString() + ' times');
     this.workflowModelActionService.changeOperatorProperty(this.operatorID, event);
   }

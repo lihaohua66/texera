@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { OperatorMetadataService } from '../../service/operator-metadata/operator-metadata.service';
 
@@ -22,50 +22,78 @@ import { WorkflowJointGraphService } from '../../service/workflow-graph/model/wo
 export class ProductTourComponent implements OnInit {
 
   steps = [
+    // 1
     {
       intro: '<h1>Welcome to Texera!</h1><br><p style="font-size:15px;">Let\'s get familiar with the website first!</p>',
     },
+    // 2
     {
       element: '.texera-operator-view-grid-container',
       intro: '<h1>Operation List</h1><br><p style="font-size:15px;">Here\'s all the operations you can use in Texera.</p>',
       position: 'right'
     },
+    // 3
     {
       element: '.texera-property-editor-grid-container',
       intro: '<h1>Properties</h1><br><p style="font-size:15px;">You can edit the property of each operator here.</p>',
       position: 'right'
     },
+    // 4
     {
       element: '.texera-workflow-editor-grid-container',
       intro: '<h1>Workflow editor</h1><br><p style="font-size:15px;">Here\'s where you can edit the workfolw.</p>',
       position: 'right'
     },
+    // 5
     {
       element: '.texera-result-view-grid-container',
       intro: '<h1>Results</h1><br><p style="font-size:15px;">The results will be shown in this box.</p>',
       position: 'right'
     },
+    // 6
     {
       intro: '<h1>Let\s start!</h1><br><p style="font-size:15px;">let\'s go through the whole process of a workflow right now!</p>',
     },
+    // 7
     {
       element: '.texera-operator-view-grid-container',
-      intro: 'First, We go to operator lists. Now open the first section named<b>Source</b>',
+      intro: 'First, We go to operator lists. Now open the first section named <b>Source</b>',
       position: 'right'
     },
+    // 8
     {
       element: '#mat-expansion-panel-header-0',
       intro: 'Now open this section',
       position: 'right',
     },
+    // 9
     {
       element: '#texera-operator-label-ScanSource',
       intro: 'Drag this and drop to workflow',
       position: 'right'
     },
+    // 10
     {
       element: '.texera-workflow-editor-grid-container',
-      intro: 'Click on this operator and see the next step',
+      intro: 'You can see the operator on the workflow editor. <br> Next, let\'s choose the source to use',
+      position: 'right'
+    },
+    // 11
+    {
+      element: '.texera-property-editor-grid-container',
+      intro: 'Type in database <b>twitter_sample</b>',
+      position: 'right'
+    },
+    // 12
+    {
+      element: '.texera-operator-view-grid-container',
+      intro: 'Now, back to the operator view.<br> We are going to use <b>View Result</b> operator.',
+      position: 'right'
+    },
+    // 13
+    {
+      element: '#texera-operator-label-ViewResult',
+      intro: 'Now, back to the operator view.<br> We are going to use <b>View Result</b> operator.',
       position: 'right'
     }
   ];
@@ -81,7 +109,7 @@ export class ProductTourComponent implements OnInit {
     private workflowGraphUtilsService: WorkflowGraphUtilsService,
     private workflowViewEventService: WorkflowViewEventService,
     private workflowTexeraGraphService: WorkflowTexeraGraphService,
-    private workflowJointGraphService: WorkflowJointGraphService
+    private workflowJointGraphService: WorkflowJointGraphService,
   ) {
     this.smartOperatorLocation = new SmartOperatorLocation(this.workflowTexeraGraphService, this.workflowJointGraphService);
   }
@@ -89,19 +117,17 @@ export class ProductTourComponent implements OnInit {
   ngOnInit() {
   }
 
-  private createScanSourceOperator(): void {
-    //if (introJsObject._currentStep === 7){
-    //  console.log(7);
-    //    document.getElementById('mat-expansion-panel-header-0').click();
-    //} else if (introJsObject._currentStep === 9) {
-      const operatorUIElement = this.workflowGraphUtilsService.getNewOperatorPredicate('ScanSource');
-      const smartLocation = this.smartOperatorLocation.suggestNextLocation('ScanSource');
+  private createScanSourceOperator(OperatorType: string): void {
+      const operatorUIElement = this.workflowGraphUtilsService.getNewOperatorPredicate(OperatorType);
+      const smartLocation = this.smartOperatorLocation.suggestNextLocation(OperatorType);
       this.workflowModelActionService.addOperator(
             operatorUIElement, smartLocation.x, smartLocation.y);
       this.workflowViewEventService.operatorSelectedInEditor.next({operatorID: operatorUIElement.operatorID});
-    //}
-  };
+  }
 
+
+  //@Output() eventEmitterChange = new EventEmitter();
+  
   startTour() {
     // Start tutorial
     this.intro.setOptions({
@@ -113,15 +139,26 @@ export class ProductTourComponent implements OnInit {
     this.intro.onexit(function() {
       this.inTour = false;
     });
-    let self = this;
-    this.intro.onbeforechange(function() 
-    {
+    const self = this;
+    this.intro.onbeforechange(function() {
       if (this._currentStep === 7) {
         console.log(7);
         document.getElementById('mat-expansion-panel-header-0').click();
       } else if (this._currentStep === 9) {
         console.log(9);
-        self.createScanSourceOperator();
+        if (! self.workflowTexeraGraphService.texeraWorkflowGraph.hasOperator('operator-1')) {
+          self.createScanSourceOperator('ScanSource');
+        }
+      } else if (this._currentStep === 11) {
+        console.log(11);
+        const event = {tableName: 'twitter_sample'};
+        //self.eventEmitterChange.emit(event);
+        //self.workflowModelActionService.changeOperatorProperty('operator-1', event);
+        //self.workflowViewEventService.operatorSelectedInEditor.next({operatorID: 'operator-1'});
+      } else if (this._currentStep === 12) {
+        console.log(12);
+        document.getElementById('mat-expansion-panel-header-0').click();
+        document.getElementById('mat-expansion-panel-header-7').click();
       }
   }
 );
