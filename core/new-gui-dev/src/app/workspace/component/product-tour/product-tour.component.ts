@@ -23,7 +23,7 @@ export class ProductTourComponent implements OnInit {
 
   steps = [
     {
-      intro: '<h1>Welcome to Texera!</h1><br><p style="font-size:15px;">Let\'s get familiar with the website first!</p>',
+      intro: '<h1>Welcome to Texera!</h1><br>Texera is a system to support cloud-based text analytics using declarative and GUI-based workflows.<br><img src="../../../../assets/Tutor_Intro_Sample.png" height="400" width="600">',
     },
     {
       element: '.texera-operator-view-grid-container',
@@ -50,7 +50,7 @@ export class ProductTourComponent implements OnInit {
     },
     {
       element: '.texera-operator-view-grid-container',
-      intro: 'First, We go to operator lists. Now open the first section named<b>Source</b>',
+      intro: 'First, We go to operator lists. Now we will open the first section named <b>Source</b>',
       position: 'right'
     },
     {
@@ -65,7 +65,12 @@ export class ProductTourComponent implements OnInit {
     },
     {
       element: '.texera-workflow-editor-grid-container',
-      intro: 'Click on this operator and see the next step',
+      intro: 'Here is the workflow Panel, now we will edit the operator attribute',
+      position: 'right'
+    },
+    {
+      element: '.texera-property-editor-grid-container',
+      intro: 'Here is the <b>Operator Property Editor</b>, now try to edit the property of SourceScan Operator, type <b>twitter_sample</b><br><img src="../../../../assets/Tutor_Property_Sample.gif">',
       position: 'right'
     }
   ];
@@ -89,13 +94,13 @@ export class ProductTourComponent implements OnInit {
   ngOnInit() {
   }
 
-  private createScanSourceOperator(): void {
+  private createScanSourceOperator(OperatorName: string): void {
     //if (introJsObject._currentStep === 7){
     //  console.log(7);
     //    document.getElementById('mat-expansion-panel-header-0').click();
     //} else if (introJsObject._currentStep === 9) {
-      const operatorUIElement = this.workflowGraphUtilsService.getNewOperatorPredicate('ScanSource');
-      const smartLocation = this.smartOperatorLocation.suggestNextLocation('ScanSource');
+      const operatorUIElement = this.workflowGraphUtilsService.getNewOperatorPredicate(OperatorName);
+      const smartLocation = this.smartOperatorLocation.suggestNextLocation(OperatorName);
       this.workflowModelActionService.addOperator(
             operatorUIElement, smartLocation.x, smartLocation.y);
       this.workflowViewEventService.operatorSelectedInEditor.next({operatorID: operatorUIElement.operatorID});
@@ -107,6 +112,9 @@ export class ProductTourComponent implements OnInit {
     this.intro.setOptions({
       steps: this.steps,
       showStepNumbers: true,
+      exitOnOverlayClick: false,
+      disableInteraction: true,
+      tooltipClass: 'customDefault'
     });
     this.intro.start();
     this.inTour = true;
@@ -121,7 +129,11 @@ export class ProductTourComponent implements OnInit {
         document.getElementById('mat-expansion-panel-header-0').click();
       } else if (this._currentStep === 9) {
         console.log(9);
-        self.createScanSourceOperator();
+        self.createScanSourceOperator("ScanSource");
+      } else if (this._currentStep === 11) {
+        this.intro.setOptions({
+          disableInteraction: false
+        });
       }
   }
 );

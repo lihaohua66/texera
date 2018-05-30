@@ -131,7 +131,6 @@ export class WorkflowEditorComponent implements AfterViewInit {
    */
   private bindJointPaperEvents(): void {
     this.paper.on('cell:pointerdown', (cellView, evt, x, y) => this.handleCellPointerDown(cellView, evt, x, y));
-
     this.paper.on('element:delete', (cellView, evt, x, y) => this.handleElementDelete(cellView, evt, x, y));
 
     this.paper.on('blank:pointerdown', (evt: Event, x: number, y: number) => {
@@ -156,6 +155,7 @@ export class WorkflowEditorComponent implements AfterViewInit {
     if (cellView.model.isElement()) {
       // an operator cell is pointed down
       // push the operator ID to the subject
+      console.log(cellView.model.id.toString());
       this.workflowViewEventService.operatorSelectedInEditor.next({ operatorID: cellView.model.id.toString() });
     }
   }
