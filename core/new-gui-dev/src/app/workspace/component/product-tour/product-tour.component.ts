@@ -26,26 +26,6 @@ export class ProductTourComponent implements OnInit {
       intro: '<h1>Welcome to Texera!</h1><br>Texera is a system to support cloud-based text analytics using declarative and GUI-based workflows.<br><img src="../../../../assets/Tutor_Intro_Sample.png" height="400" width="800">',
     },
     {
-      element: '.texera-operator-view-grid-container',
-      intro: '<h1>Operation List</h1><br><p style="font-size:15px;">Here\'s all the operations you can use in Texera.</p>',
-      position: 'right'
-    },
-    {
-      element: '.texera-property-editor-grid-container',
-      intro: '<h1>Properties</h1><br><p style="font-size:15px;">You can edit the property of each operator here.</p>',
-      position: 'right'
-    },
-    {
-      element: '.texera-workflow-editor-grid-container',
-      intro: '<h1>Workflow editor</h1><br><p style="font-size:15px;">Here\'s where you can edit the workfolw.</p>',
-      position: 'right'
-    },
-    {
-      element: '.texera-result-view-grid-container',
-      intro: '<h1>Results</h1><br><p style="font-size:15px;">The results will be shown in this box.</p>',
-      position: 'right'
-    },
-    {
       intro: '<h1>Let\s start!</h1><br><p style="font-size:15px;">let\'s go through the whole process of a workflow right now!</p>',
     },
     {
@@ -54,7 +34,7 @@ export class ProductTourComponent implements OnInit {
       position: 'right'
     },
     {
-      element: '#mat-expansion-panel-header-0',
+      element: '#cdk-accordion-child-0',
       intro: 'Now open this section',
       position: 'right',
     },
@@ -99,7 +79,7 @@ export class ProductTourComponent implements OnInit {
       position: 'right'
     },
     {
-      intro: '<h1>Congradulation!</h1><br><h2>You have finish the basic tutorial, now you can start your own workflow</h2><br><img src="../../../../assets/Tutor_End_Sample.gif">',
+      intro: '<h1>Congratulation!</h1><br><h2>You have finish the basic tutorial, now you can start your own workflow</h2><br><img src="../../../../assets/Tutor_End_Sample.gif">',
     }
   ];
   intro = require('../../../../../node_modules/intro.js/intro.js').introJs();
@@ -123,10 +103,6 @@ export class ProductTourComponent implements OnInit {
   }
 
   private createScanSourceOperator(OperatorName: string): void {
-    //if (introJsObject._currentStep === 7){
-    //  console.log(7);
-    //    document.getElementById('mat-expansion-panel-header-0').click();
-    //} else if (introJsObject._currentStep === 9) {
       const operatorUIElement = this.workflowGraphUtilsService.getNewOperatorPredicate(OperatorName);
       const smartLocation = this.smartOperatorLocation.suggestNextLocation(OperatorName);
       this.workflowModelActionService.addOperator(
@@ -152,17 +128,24 @@ export class ProductTourComponent implements OnInit {
     let self = this;
     this.intro.onbeforechange(function() 
     {
-      if (this._currentStep === 7) {
+      if (this._currentStep === 3) {
         console.log(7);
         document.getElementById('mat-expansion-panel-header-0').click();
-      } else if (this._currentStep === 9) {
+      } else if (this._currentStep === 5) {
         console.log(9);
-        self.createScanSourceOperator("ScanSource");
+        if (! self.workflowTexeraGraphService.texeraWorkflowGraph.hasOperator('operator-1')) {
+          self.createScanSourceOperator("ScanSource");
+        }
         document.getElementById('mat-expansion-panel-header-0').click();
-      } else if (this._currentStep === 12) {
+      } else if (this._currentStep === 7) {
         document.getElementById('mat-expansion-panel-header-7').click();
-      } else if(this._currentStep === 13) {
-        self.createScanSourceOperator("ViewResults");
+      } else if(this._currentStep === 9) {
+        console.log(! self.workflowTexeraGraphService.texeraWorkflowGraph.hasOperator('operator-2'));
+        if (! self.workflowTexeraGraphService.texeraWorkflowGraph.hasOperator('operator-2')) {
+          self.createScanSourceOperator("ViewResults");
+        }
+      } else if (this._currentStep === 11) {
+        document.getElementById('texera-workspace-navigation-run').click();
       }
   });
   this.intro.onexit(function ()

@@ -23,7 +23,7 @@
       "../node_modules/jointjs/css/themes/default.css",
       "../node_modules/bootstrap/dist/css/bootstrap.min.css",
       "styles.scss",
-      "../node_modules/intro.js/minified/introjs.min.css"
+      "../node_modules/intro.js/introjs.css"
     ],
     "scripts": [
       "../node_modules/jquery/dist/jquery.js",
