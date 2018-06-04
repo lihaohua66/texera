@@ -26,26 +26,6 @@ export class ProductTourComponent implements OnInit {
       intro: '<h1>Welcome to Texera!</h1><br>Texera is a system to support cloud-based text analytics using declarative and GUI-based workflows.<br><img src="../../../../assets/Tutor_Intro_Sample.png" height="400" width="800">',
     },
     {
-      element: '.texera-operator-view-grid-container',
-      intro: '<h1>Operation List</h1><br><p style="font-size:15px;">Here\'s all the operations you can use in Texera.</p>',
-      position: 'right'
-    },
-    {
-      element: '.texera-property-editor-grid-container',
-      intro: '<h1>Properties</h1><br><p style="font-size:15px;">You can edit the property of each operator here.</p>',
-      position: 'right'
-    },
-    {
-      element: '.texera-workflow-editor-grid-container',
-      intro: '<h1>Workflow editor</h1><br><p style="font-size:15px;">Here\'s where you can edit the workfolw.</p>',
-      position: 'right'
-    },
-    {
-      element: '.texera-result-view-grid-container',
-      intro: '<h1>Results</h1><br><p style="font-size:15px;">The results will be shown in this box.</p>',
-      position: 'right'
-    },
-    {
       intro: '<h1>Let\s start!</h1><br><p style="font-size:15px;">let\'s go through the whole process of a workflow right now!</p>',
     },
     {
@@ -59,8 +39,8 @@ export class ProductTourComponent implements OnInit {
       position: 'right',
     },
     {
-      element: '#texera-operator-label-ScanSource',
-      intro: 'Drag this and drop to workflow',
+      element: '.texera-operator-view-grid-container',
+      intro: 'Drag this and drop to workflow<br><img src="../../../../assets/Tutor_Intro_Drag_Srouce.gif">',
       position: 'right'
     },
     {
@@ -79,8 +59,8 @@ export class ProductTourComponent implements OnInit {
       position: 'right',
     },
     {
-      element: '#texera-operator-label-ViewResults',
-      intro: 'Drag this and drop to workflow',
+      element: '.texera-operator-view-grid-container',
+      intro: 'Drag this and drop to workflow<br><img src="../../../../assets/Tutor_Intro_Drag_Result.gif">',
       position: 'right'
     },
     {
@@ -99,7 +79,7 @@ export class ProductTourComponent implements OnInit {
       position: 'right'
     },
     {
-      intro: '<h1>Congradulation!</h1><br><h2>You have finish the basic tutorial, now you can start your own workflow</h2><br><img src="../../../../assets/Tutor_End_Sample.gif">',
+      intro: '<h1>Congratulation!</h1><br><h2>You have finished the basic tutorial</h2><br><img src="../../../../assets/Tutor_End_Sample.gif">',
     }
   ];
   intro = require('../../../../../node_modules/intro.js/intro.js').introJs();
@@ -150,19 +130,21 @@ export class ProductTourComponent implements OnInit {
       this.inTour = false;
     });
     let self = this;
+    //document.getElementById("mat-expansion-panel-header-0").addEventListener("click", this.jumpToNextStep);
     this.intro.onbeforechange(function() 
     {
-      if (this._currentStep === 7) {
+      if (this._currentStep === 3) {
         console.log(7);
         document.getElementById('mat-expansion-panel-header-0').click();
-      } else if (this._currentStep === 9) {
-        console.log(9);
-        self.createScanSourceOperator("ScanSource");
-        document.getElementById('mat-expansion-panel-header-0').click();
-      } else if (this._currentStep === 12) {
+      
+      } //else if (this._currentStep === 5) {
+        //console.log(9);
+        //self.createScanSourceOperator("ScanSource");
+        //document.getElementById('mat-expansion-panel-header-0').click();
+       else if (this._currentStep === 8) {
         document.getElementById('mat-expansion-panel-header-7').click();
-      } else if(this._currentStep === 13) {
-        self.createScanSourceOperator("ViewResults");
+      //} else if(this._currentStep === 9) {
+      //  self.createScanSourceOperator("ViewResults");
       }
   });
   this.intro.onexit(function ()
@@ -171,6 +153,12 @@ export class ProductTourComponent implements OnInit {
   });
 
 
+  }
+
+  jumpToNextStep() {
+    console.log("nextstep"); 
+    this.intro.exit()
+    this.intro().start().goToStep(4);
   }
 
 }
