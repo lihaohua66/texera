@@ -126,21 +126,34 @@ export class ProductTourComponent implements OnInit {
       this.inTour = false;
     });
     let self = this;
+    let open = false;
+    let open2 = false;
     this.intro.onbeforechange(function() 
     {
       if (this._currentStep === 3) {
-        console.log(7);
-        document.getElementById('mat-expansion-panel-header-0').click();
+        console.log(3);
+        if (! open) {
+          open2 = false;
+          open = true;
+          document.getElementById('mat-expansion-panel-header-0').click();
+        }
       } else if (this._currentStep === 5) {
-        console.log(9);
+        console.log(5);
+        if (!open){
+          open2 = false;
+          open = true;
+          document.getElementById('mat-expansion-panel-header-0').click();
+        }
         if (! self.workflowTexeraGraphService.texeraWorkflowGraph.hasOperator('operator-1')) {
           self.createScanSourceOperator("ScanSource");
         }
-        document.getElementById('mat-expansion-panel-header-0').click();
       } else if (this._currentStep === 7) {
-        document.getElementById('mat-expansion-panel-header-7').click();
+        if (! open2) {
+          open = false;
+          open2= true;
+          document.getElementById('mat-expansion-panel-header-7').click();
+        }
       } else if(this._currentStep === 9) {
-        console.log(! self.workflowTexeraGraphService.texeraWorkflowGraph.hasOperator('operator-2'));
         if (! self.workflowTexeraGraphService.texeraWorkflowGraph.hasOperator('operator-2')) {
           self.createScanSourceOperator("ViewResults");
         }
